@@ -1,0 +1,15 @@
+required:
+  - type
+  - watcher
+type: object
+properties:
+  type:
+    type: string
+  watcher:
+    $ref: ./WatchUser.yaml
+  spaceKey:
+    type: string
+  labelName:
+    type: string
+  prefix:
+    type: string

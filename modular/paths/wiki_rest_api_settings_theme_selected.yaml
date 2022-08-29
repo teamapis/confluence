@@ -1,0 +1,35 @@
+get:
+  tags:
+    - Themes
+  summary: Get global theme
+  description: |-
+    Returns the globally assigned theme.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None
+  operationId: getGlobalTheme
+  responses:
+    '200':
+      description: Returned if the global theme is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Theme.yaml
+    '404':
+      description: |-
+        Returned if Confluence does not have a global theme assigned, i.e.
+        the default theme is used.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - manage:confluence-configuration
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - manage:confluence-configuration
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:configuration:confluence
+  x-atlassian-connect-scope: READ

@@ -1,0 +1,90 @@
+post:
+  tags:
+    - Content
+  summary: Archive pages
+  description: >-
+    Archives a list of pages. The pages to be archived are specified as a list
+    of content IDs.
+
+    This API accepts the archival request and returns a task ID.
+
+    The archival process happens asynchronously.
+
+    Use the /longtask/<taskId> REST API to get the copy task status.
+
+
+    Each content ID needs to resolve to page objects that are not already in an
+    archived state.
+
+    The content IDs need not belong to the same space.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Archive' permission for each of the pages in the corresponding space it
+    belongs to.
+  operationId: archivePages
+  requestBody:
+    description: The pages to be archived.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            pages:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    description: The `id` of the page to be archived.
+  responses:
+    '202':
+      description: Returned if the archive request has been submitted.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LongTask.yaml
+    '400':
+      description: >-
+        Returned if:
+
+        - there is an archival job already running for the tenant.
+
+        - the number of pages to archive is larger than the limit of 300.
+
+        - any of the content IDs specified in the array do not resolve to pages.
+
+        - any of the specified pages are already archived.
+
+        - the request is coming from a free edition tenant.
+
+        - the request is coming from a non premium edition tenant with more than
+        1 page ID
+          in the archive request.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content.metadata:confluence
+        - write:page:confluence
+  x-experimental: true
+  x-atlassian-connect-scope: WRITE

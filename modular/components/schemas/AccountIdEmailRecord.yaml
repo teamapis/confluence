@@ -1,0 +1,9 @@
+required:
+  - accountId
+  - email
+type: object
+properties:
+  accountId:
+    type: string
+  email:
+    type: string

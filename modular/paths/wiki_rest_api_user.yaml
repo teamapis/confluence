@@ -1,0 +1,84 @@
+get:
+  tags:
+    - Users
+  summary: Get user
+  description: >-
+    Returns a user. This includes information about the user, such as the
+
+    display name, account ID, profile picture, and more. The information
+    returned may be
+
+    restricted by the user's profile visibility settings.
+
+
+    **Note:** to add, edit, or delete users in your organization, see the
+
+    [user management REST API](/cloud/admin/user-management/about/).
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getUser
+  parameters:
+    - name: accountId
+      in: query
+      description: >-
+        The account ID of the user. The accountId uniquely identifies the user
+        across all Atlassian products.
+
+        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`.
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the user to
+        expand.
+
+          - `operations` returns the operations that the user is allowed to do.
+          - personalSpace returns the user's personal space, if it exists.
+          - `isExternalCollaborator` returns whether the user is an external collaborator user
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - operations
+            - personalSpace
+            - isExternalCollaborator
+  responses:
+    '200':
+      description: Returned if the requested user is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/User.yaml
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: Returned if the calling user does not have permission to view users.
+      content: {}
+    '404':
+      description: Returned if a user with the given accountId does not exist.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-user
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-user
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

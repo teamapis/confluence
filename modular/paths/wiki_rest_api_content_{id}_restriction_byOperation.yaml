@@ -1,0 +1,78 @@
+get:
+  tags:
+    - Content restrictions
+  summary: Get restrictions by operation
+  description: |-
+    Returns restrictions on a piece of content by operation. This method is
+    similar to [Get restrictions](#api-content-id-restriction-get) except that
+    the operations are properties of the return object, rather than items in
+    a results array.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to view the content.
+  operationId: getRestrictionsByOperation
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its restrictions.
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the content
+
+        restrictions to expand.
+
+
+        - `restrictions.user` returns the piece of content that the restrictions
+        are
+
+        applied to. Expanded by default.
+
+        - `restrictions.group` returns the piece of content that the
+        restrictions are
+
+        applied to. Expanded by default.
+
+        - `content` returns the piece of content that the restrictions are
+
+        applied to.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - restrictions.user
+            - restrictions.group
+            - content
+  responses:
+    '200':
+      description: Returned if the requested restrictions are returned.
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties:
+              properties:
+                operationType:
+                  $ref: ../components/schemas/ContentRestriction.yaml
+                _links:
+                  $ref: ../components/schemas/GenericLinks.yaml
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.all
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.all
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

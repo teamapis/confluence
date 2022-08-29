@@ -1,0 +1,23 @@
+required:
+  - _links
+  - limit
+  - results
+  - size
+  - start
+type: object
+properties:
+  results:
+    type: array
+    items:
+      $ref: ./SpaceProperty.yaml
+  start:
+    type: integer
+    format: int32
+  limit:
+    type: integer
+    format: int32
+  size:
+    type: integer
+    format: int32
+  _links:
+    $ref: ./GenericLinks.yaml

@@ -1,0 +1,8 @@
+type: object
+properties:
+  username:
+    $ref: ./GenericUserName.yaml
+  key:
+    $ref: ./GenericUserKey.yaml
+  accountId:
+    $ref: ./GenericAccountId.yaml

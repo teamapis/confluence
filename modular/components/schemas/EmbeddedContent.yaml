@@ -1,0 +1,10 @@
+type: object
+additionalProperties: true
+properties:
+  entityId:
+    type: integer
+    format: int64
+  entityType:
+    type: string
+  entity:
+    $ref: ./Embeddable.yaml

@@ -1,0 +1,15 @@
+required:
+  - operation
+  - subject
+type: object
+properties:
+  subject:
+    $ref: ./PermissionSubjectWithGroupId.yaml
+  operation:
+    type: string
+    description: The content permission operation to check.
+    enum:
+      - read
+      - update
+      - delete
+description: This object represents the request for the content permission check API.

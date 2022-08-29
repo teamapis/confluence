@@ -1,0 +1,153 @@
+put:
+  tags:
+    - Content
+  summary: Publish shared draft
+  description: >-
+    Publishes a shared draft of a page created from a blueprint.
+
+
+    By default, the following objects are expanded: `body.storage`, `history`,
+    `space`, `version`, `ancestors`.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to view the draft and 'Add' permission for the space that
+
+    the content will be created in.
+  operationId: publishSharedDraft
+  parameters:
+    - name: draftId
+      in: path
+      description: |-
+        The ID of the draft page that was created from a blueprint.
+        You can find the `draftId` in the Confluence application by
+        opening the draft page and checking the page URL.
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: |-
+        The status of the content to be updated, i.e. the draft. This is set
+        to 'draft' by default, so you shouldn't need to specify it.
+      schema:
+        type: string
+        default: draft
+    - $ref: ../components/parameters/contentExpand.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentBlueprintDraft.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the draft was successfully published.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Content.yaml
+    '400':
+      description: |-
+        Returned if a title is not specified or a page with the
+        title already exists.
+      content: {}
+    '409':
+      description: Returned if the version is not set to 1.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+        - write:content:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE
+post:
+  tags:
+    - Content
+  summary: Publish legacy draft
+  description: >-
+    Publishes a legacy draft of a page created from a blueprint. Legacy drafts
+
+    will eventually be removed in favor of shared drafts. For now, this method
+
+    works the same as [Publish shared
+    draft](#api-content-blueprint-instance-draftId-put).
+
+
+    By default, the following objects are expanded: `body.storage`, `history`,
+    `space`, `version`, `ancestors`.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to view the draft and 'Add' permission for the space that
+
+    the content will be created in.
+  operationId: publishLegacyDraft
+  parameters:
+    - name: draftId
+      in: path
+      description: |-
+        The ID of the draft page that was created from a blueprint.
+        You can find the `draftId` in the Confluence application by
+        opening the draft page and checking the page URL.
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: |-
+        The status of the content to be updated, i.e. the draft. This is set
+        to 'draft' by default, so you shouldn't need to specify it.
+      schema:
+        type: string
+        default: draft
+    - $ref: ../components/parameters/contentExpand.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentBlueprintDraft.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the draft was successfully published.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Content.yaml
+    '400':
+      description: |-
+        Returned if a title is not specified or a page with the
+        title already exists.
+      content: {}
+    '409':
+      description: Returned if the version is not set to 1.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+        - write:content:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE

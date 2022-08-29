@@ -1,0 +1,85 @@
+post:
+  tags:
+    - Content - children and descendants
+  summary: Copy single page
+  description: >-
+    Copies a single page and its associated properties, permissions,
+    attachments, and custom contents.
+     The `id` path parameter refers to the content ID of the page to copy. The target of the page to be copied
+     is defined using the `destination` in the request body and can be one of the following types.
+
+      - `space`: page will be copied to the specified space as a root page on the space
+      - `parent_page`: page will be copied as a child of the specified parent page
+      - `existing_page`: page will be copied and replace the specified page
+
+    By default, the following objects are expanded: `space`, `history`,
+    `version`.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'Add'
+    permission for the space that the content will be copied in and permission
+    to update the content if copying to an `existing_page`.
+  operationId: copyPage
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/contentExpandWithSubExpandLimit.yaml
+  requestBody:
+    description: Request object from json post body
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CopyPageRequest.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the content is copied.
+      content:
+        application/json;charset=UTF-8:
+          schema:
+            $ref: ../components/schemas/Content.yaml
+    '400':
+      description: |-
+        Returned if;
+
+        - destination or any of its fields are not specified.
+        - destination.type is invalid.
+        - sub-expansions limit exceeds.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: >-
+        Returned if the user does not have permission to create content at
+        destination.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - the original page doesn't exist.
+        - the destination page doesn’t exist.
+        - the destination space doesn’t exist.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+        - write:page:confluence
+  x-codegen-request-body-name: request
+  x-atlassian-connect-scope: WRITE

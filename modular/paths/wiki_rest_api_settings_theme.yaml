@@ -1,0 +1,49 @@
+get:
+  tags:
+    - Themes
+  summary: Get themes
+  description: |-
+    Returns all themes, not including the default theme.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None
+  operationId: getThemes
+  parameters:
+    - name: start
+      in: query
+      description: The starting index of the returned themes.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of themes to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 100
+  responses:
+    '200':
+      description: Returned if the requested themes are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ThemeArray.yaml
+  security:
+    - oAuthDefinitions:
+        - manage:confluence-configuration
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - manage:confluence-configuration
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:configuration:confluence
+  x-atlassian-connect-scope: READ

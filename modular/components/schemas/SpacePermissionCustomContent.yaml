@@ -1,0 +1,34 @@
+required:
+  - operations
+  - subject
+type: object
+properties:
+  subject:
+    $ref: ./PermissionSubject.yaml
+  operations:
+    type: array
+    items:
+      required:
+        - access
+        - key
+        - target
+      type: object
+      properties:
+        key:
+          type: string
+          description: The operation type
+          enum:
+            - read
+            - create
+            - delete
+        target:
+          type: string
+          description: The custom content type
+        access:
+          type: boolean
+          description: Grant or restrict access
+description: >-
+  This object represents a list of space permissions for custom content type for
+  an individual user. Permissions consist of
+
+  a subjects object and a list with at least one operation object.

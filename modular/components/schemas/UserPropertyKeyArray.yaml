@@ -1,0 +1,22 @@
+required:
+  - results
+type: object
+properties:
+  results:
+    type: array
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+  start:
+    type: integer
+    format: int32
+  limit:
+    type: integer
+    format: int32
+  size:
+    type: integer
+    format: int32
+  _links:
+    $ref: ./GenericLinks.yaml

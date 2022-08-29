@@ -1,0 +1,91 @@
+get:
+  tags:
+    - Template
+  summary: Get blueprint templates
+  description: >-
+    Returns all templates provided by blueprints. Use this method to retrieve
+
+    all global blueprint templates or all blueprint templates in a space.
+
+
+    Note, all global blueprints are inherited by each space. Space blueprints
+
+    can be customised without affecting the global blueprints.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'View' permission for the space to view blueprints for the space and
+    permission
+
+    to access the Confluence site ('Can use' global permission) to view global
+    blueprints.
+  operationId: getBlueprintTemplates
+  parameters:
+    - name: spaceKey
+      in: query
+      description: |-
+        The key of the space to be queried for templates. If the `spaceKey`
+        is not specified, global blueprint templates will be returned.
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned templates.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of templates to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the template
+        to expand.
+
+        - `body` returns the content of the template in storage format.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - body
+  responses:
+    '200':
+      description: Returned if the requested templates are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BlueprintTemplateArray.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view
+        blueprint templates.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:template:confluence
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

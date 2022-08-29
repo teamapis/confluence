@@ -1,0 +1,111 @@
+get:
+  tags:
+    - Space settings
+  summary: Get space settings
+  description: |-
+    Returns the settings of a space. Currently only the
+    `routeOverrideEnabled` setting can be returned.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'View' permission for the space.
+  operationId: getSpaceSettings
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to be queried for its settings.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the space settings are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SpaceSettings.yaml
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no space with the given key.
+        - The calling user does not have permission to view the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-space.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-space.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space.setting:confluence
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Space settings
+  summary: Update space settings
+  description: |-
+    Updates the settings for a space. Currently only the
+    `routeOverrideEnabled` setting can be updated.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'Admin' permission for the space.
+  operationId: updateSpaceSettings
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space whose settings will be updated.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The space settings to update.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/SpaceSettingsUpdate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if space settings are updated.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SpaceSettings.yaml
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no space with the given key.
+        - The calling user does not have permission to update the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-space
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-space
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space.setting:confluence
+        - write:space.setting:confluence
+  x-codegen-request-body-name: SpaceSettingsUpdate
+  x-atlassian-connect-scope: WRITE

@@ -1,0 +1,73 @@
+put:
+  tags:
+    - Settings
+  summary: Set look and feel settings
+  description: |-
+    Sets the look and feel settings to either the default settings or the
+    custom settings, for the site or a single space. Note, the default
+    space settings are inherited from the current global settings.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'Admin' permission for the space.
+  operationId: setLookAndFeelSettings
+  parameters:
+    - name: spaceKey
+      in: query
+      description: |-
+        The key of the space for which the look and feel settings will be
+        set. If this is not set, the global look and feel settings will be
+        set.
+      schema:
+        type: string
+  requestBody:
+    description: The look and feel type to be set.
+    content:
+      application/json:
+        schema:
+          type: string
+          enum:
+            - global
+            - custom
+            - theme
+    required: true
+  responses:
+    '200':
+      description: Returned if the look and feel settings were set.
+      content:
+        application/json:
+          schema:
+            type: string
+    '400':
+      description: |-
+        Returned if;
+
+        - The `spaceKey` is invalid.
+        - The look and feel type is invalid.
+      content: {}
+    '403':
+      description: |-
+        Returned if the look and feel type is set to 'theme' but the
+        space/site doesn't have a theme assigned.
+      content: {}
+    '404':
+      description: Returned if there is no space with the given `spaceKey`.
+      content: {}
+  deprecated: true
+  security:
+    - oAuthDefinitions:
+        - manage:confluence-configuration
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - manage:confluence-configuration
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:configuration:confluence
+        - read:space.setting:confluence
+        - write:configuration:confluence
+        - write:space.setting:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE

@@ -1,0 +1,102 @@
+required:
+  - type
+  - version
+type: object
+additionalProperties: true
+properties:
+  version:
+    nullable: true
+    required:
+      - number
+    type: object
+    additionalProperties: true
+    properties:
+      number:
+        type: integer
+        description: The version number.
+        format: int32
+    description: >-
+      The new version for the updated content. Set this to the current version
+      number incremented by one, unless you are changing the status to 'draft'
+      which must have a version number of 1.
+
+
+      To get the current version number, use [Get content by
+      ID](#api-content-id-get) and retrieve `version.number`.
+  title:
+    nullable: true
+    maxLength: 255
+    type: string
+    description: >-
+      The updated title of the content. If you are not changing this field, set
+      this to the current `title`.
+  type:
+    nullable: true
+    type: string
+    description: >-
+      The type of content. Set this to the current type of the content. For
+      example, - page - blogpost - comment - attachment
+  status:
+    type: string
+    description: >-
+      The updated status of the content. Note, if you change the status of a
+      page from
+
+      'current' to 'draft' and it has an existing draft, the existing draft will
+      be deleted
+
+      in favor of the updated page.
+    enum:
+      - current
+      - trashed
+      - deleted
+      - historical
+      - draft
+  ancestors:
+    nullable: true
+    type: array
+    description: >-
+      The new parent for the content. Only one parent content 'id' can be
+      specified.
+    items:
+      required:
+        - id
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          oneOf:
+            - type: integer
+            - type: string
+          description: The `id` of the parent content.
+  body:
+    type: object
+    properties:
+      view:
+        $ref: ./ContentBodyCreate.yaml
+      export_view:
+        $ref: ./ContentBodyCreate.yaml
+      styled_view:
+        $ref: ./ContentBodyCreate.yaml
+      storage:
+        $ref: ./ContentBodyCreateStorage.yaml
+      editor:
+        $ref: ./ContentBodyCreate.yaml
+      editor2:
+        $ref: ./ContentBodyCreate.yaml
+      wiki:
+        $ref: ./ContentBodyCreate.yaml
+      atlas_doc_format:
+        $ref: ./ContentBodyCreate.yaml
+      anonymous_export_view:
+        $ref: ./ContentBodyCreate.yaml
+    description: >-
+      The updated body of the content. Does not apply to attachments.
+
+      If you are not sure how to generate these formats, you can create a page
+      in the
+
+      Confluence application, retrieve the content using [Get
+      content](#api-content-get),
+
+      and expand the desired content format, e.g. `expand=body.storage`.

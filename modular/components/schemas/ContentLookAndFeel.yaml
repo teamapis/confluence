@@ -1,0 +1,10 @@
+type: object
+properties:
+  screen:
+    $ref: ./ScreenLookAndFeel.yaml
+  container:
+    $ref: ./ContainerLookAndFeel.yaml
+  header:
+    $ref: ./ContainerLookAndFeel.yaml
+  body:
+    $ref: ./ContainerLookAndFeel.yaml

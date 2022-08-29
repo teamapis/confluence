@@ -1,0 +1,61 @@
+get:
+  tags:
+    - Analytics
+  summary: Get viewers
+  description: Get the total number of distinct viewers a piece of content has.
+  operationId: getViewers
+  parameters:
+    - name: contentId
+      in: path
+      description: The ID of the content to get the viewers for.
+      required: true
+      schema:
+        type: string
+    - name: fromDate
+      in: query
+      description: The number of views for the content since the date.
+      schema:
+        type: string
+      example: '2021-03-21T00:00:00.000Z'
+  responses:
+    '200':
+      description: Returns the total number of distinct viewers for the content.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: The content ID.
+              count:
+                type: integer
+                description: The total number of distinct viewers for the content.
+    '400':
+      description: Returned if client input is invalid.
+    '401':
+      description: Returned if the authentication credentials are incorrect.
+      content: {}
+    '403':
+      description: |-
+        Returned if the authentication credentials are missing
+        from the request.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+        - There is no content with the given ID.
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:analytics.content:confluence
+  x-atlassian-connect-scope: READ

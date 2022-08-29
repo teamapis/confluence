@@ -1,0 +1,103 @@
+get:
+  tags:
+    - Content - children and descendants
+  summary: Get content children
+  description: >-
+    Returns a map of the direct children of a piece of content. A piece of
+    content
+
+    has different types of child content, depending on its type. These are
+
+    the default parent-child content type relationships:
+
+
+    - `page`: child content is `page`, `comment`, `attachment`
+
+    - `blogpost`: child content is `comment`, `attachment`
+
+    - `attachment`: child content is `comment`
+
+    - `comment`: child content is `attachment`
+
+
+    Apps can override these default relationships. Apps can also introduce
+
+    new content types that create new parent-child content relationships.
+
+
+    Note, the map will always include all child content types that are valid
+
+    for the content. However, if the content has no instances of a child content
+
+    type, the map will contain an empty array for that child content type.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'View' permission for the space,
+
+    and permission to view the content if it is a page.
+  operationId: getContentChildren
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its children.
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the children to
+        expand, where:
+
+
+        - `attachment` returns all attachments for the content.
+
+        - `comments` returns all comments for the content.
+
+        - `page` returns all child pages of the content.
+
+        - Custom content types that are provided by apps are also supported.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+    - name: parentVersion
+      in: query
+      description: |-
+        The version of the parent content to retrieve children for.
+        Currently, this only works for the latest version.
+      schema:
+        type: integer
+        format: int32
+        default: 0
+  responses:
+    '200':
+      description: Returned if the requested content children are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentChildren.yaml
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

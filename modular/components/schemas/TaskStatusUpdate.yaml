@@ -1,0 +1,9 @@
+required:
+  - status
+type: object
+properties:
+  status:
+    type: string
+    enum:
+      - complete
+      - incomplete

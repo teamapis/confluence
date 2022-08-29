@@ -1,0 +1,110 @@
+post:
+  tags:
+    - Group
+  summary: Add member to group
+  description: |-
+    Adds a user as a member in a group.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    User must be a site admin.
+  operationId: addUserToGroup
+  parameters:
+    - name: name
+      in: query
+      description: Name of the group whose membership is updated
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: AccountId of the user who needs to be added as member.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/AccountId.yaml
+    required: true
+  responses:
+    '201':
+      description: Returned if the group was created successfully.
+      content: {}
+    '400':
+      description: Returned if the name or accountId are missing or invalid.
+      content: {}
+    '401':
+      description: Returned if the calling user is not logged in to Confluence.
+      content: {}
+    '403':
+      description: Returned if the user is not a site admin.
+      content: {}
+    '404':
+      description: If no user group by the give name exists.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-groups
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-groups
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:group:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: INACCESSIBLE
+delete:
+  tags:
+    - Group
+  summary: Remove member from group
+  description: |-
+    Remove user as a member from a group.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    User must be a site admin.
+  operationId: removeMemberFromGroup
+  parameters:
+    - name: name
+      in: query
+      description: Name of the group whose membership is updated.
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/userLookupKey.yaml
+    - $ref: ../components/parameters/userLookupUsername.yaml
+    - $ref: ../components/parameters/userLookupAccountId.yaml
+  responses:
+    '204':
+      description: Returned if the group was removed successfully.
+      content: {}
+    '400':
+      description: Returned if the name is missing or invalid.
+      content: {}
+    '401':
+      description: Returned if the calling user is not logged in to Confluence.
+      content: {}
+    '403':
+      description: |-
+        Returned if the user is not a site admin.
+        Note: A 204 is returned if the user is not part of the
+        group.
+      content: {}
+    '404':
+      description: |-
+        If no user group by the give name exists or if no user exists
+        for the given accountId.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-groups
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-groups
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:group:confluence
+  x-atlassian-connect-scope: INACCESSIBLE

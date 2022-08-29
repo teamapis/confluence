@@ -1,0 +1,39 @@
+type: object
+properties:
+  uris:
+    type: object
+    properties:
+      all:
+        oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+      css:
+        oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+      js:
+        oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+  tags:
+    type: object
+    properties:
+      all:
+        type: string
+      css:
+        type: string
+      data:
+        type: string
+      js:
+        type: string
+  metatags:
+    type: string
+  _expandable:
+    type: object
+    additionalProperties: true

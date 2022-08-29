@@ -1,0 +1,10 @@
+type: object
+properties:
+  name:
+    type: string
+  body:
+    type: string
+  parameters:
+    type: object
+  _links:
+    $ref: ./GenericLinks.yaml

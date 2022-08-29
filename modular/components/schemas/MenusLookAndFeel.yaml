@@ -1,0 +1,14 @@
+required:
+  - color
+  - hoverOrFocus
+type: object
+properties:
+  hoverOrFocus:
+    required:
+      - backgroundColor
+    type: object
+    properties:
+      backgroundColor:
+        type: string
+  color:
+    type: string

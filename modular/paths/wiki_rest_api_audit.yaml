@@ -1,0 +1,137 @@
+get:
+  tags:
+    - Audit
+  summary: Get audit records
+  description: >-
+    Returns all records in the audit log, optionally for a certain date range.
+
+    This contains information about events like space exports, group membership
+
+    changes, app installations, etc. For more information, see
+
+    [Audit
+    log](https://confluence.atlassian.com/confcloud/audit-log-802164269.html)
+
+    in the Confluence administrator's guide.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Confluence Administrator' global permission.
+  operationId: getAuditRecords
+  parameters:
+    - name: startDate
+      in: query
+      description: >-
+        Filters the results to the records on or after the `startDate`.
+
+        The `startDate` must be specified as a
+        [timestamp](https://www.unixtimestamp.com/).
+      schema:
+        type: string
+    - name: endDate
+      in: query
+      description: >-
+        Filters the results to the records on or before the `endDate`.
+
+        The `endDate` must be specified as a
+        [timestamp](https://www.unixtimestamp.com/).
+      schema:
+        type: string
+    - name: searchString
+      in: query
+      description: |-
+        Filters the results to records that have string property values
+        matching the `searchString`.
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned records.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of records to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 1000
+  responses:
+    '200':
+      description: Returned if the requested records are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AuditRecordArray.yaml
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view the audit
+        log.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:audit-log:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:audit-log:confluence
+  x-atlassian-connect-scope: INACCESSIBLE
+post:
+  tags:
+    - Audit
+  summary: Create audit record
+  description: |-
+    Creates a record in the audit log.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'Confluence Administrator' global permission.
+  operationId: createAuditRecord
+  requestBody:
+    description: The record to be created in the audit log.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/AuditRecordCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the record is created in the audit log.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AuditRecord.yaml
+    '400':
+      description: Returned if the `remoteAddress` property is not specified.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:audit-log:confluence
+        - write:audit-log:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:audit-log:confluence
+        - write:audit-log:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: INACCESSIBLE

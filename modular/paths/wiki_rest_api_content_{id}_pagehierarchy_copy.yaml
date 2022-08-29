@@ -1,0 +1,71 @@
+post:
+  tags:
+    - Content - children and descendants
+  summary: Copy page hierarchy
+  description: >-
+    Copy page hierarchy allows the copying of an entire hierarchy of pages and
+    their associated properties, permissions and attachments.
+     The id path parameter refers to the content id of the page to copy, and the new parent of this copied page is defined using the destinationPageId in the request body.
+     The titleOptions object defines the rules of renaming page titles during the copy;
+     for example, search and replace can be used in conjunction to rewrite the copied page titles.
+
+     Response example:
+     <pre><code>
+     {
+          "id" : "1180606",
+          "links" : {
+               "status" : "/rest/api/longtask/1180606"
+          }
+     }
+     </code></pre>
+     Use the /longtask/<taskId> REST API to get the copy task status.
+  operationId: copyPageHierarchy
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: Request object from json post body
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CopyPageHierarchyRequest.yaml
+    required: true
+  responses:
+    '202':
+      description: Returns a full JSON representation of a long running task
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LongTask.yaml
+    '400':
+      description: >-
+        Returned if the title prefix is invalid (e.g. is empty, creates a
+        conflict)
+      content: {}
+    '403':
+      description: >-
+        Returned if the user does not have permission to create content at
+        destination
+      content: {}
+    '404':
+      description: Returned if original page or destination page does not exist.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content.metadata:confluence
+        - write:page:confluence
+  x-codegen-request-body-name: request
+  x-atlassian-connect-scope: WRITE

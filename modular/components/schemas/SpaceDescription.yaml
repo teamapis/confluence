@@ -1,0 +1,19 @@
+required:
+  - embeddedContent
+  - representation
+  - value
+type: object
+additionalProperties: true
+properties:
+  value:
+    type: string
+  representation:
+    type: string
+    enum:
+      - plain
+      - view
+  embeddedContent:
+    type: array
+    items:
+      type: object
+      properties: {}

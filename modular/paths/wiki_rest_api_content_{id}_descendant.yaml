@@ -1,0 +1,95 @@
+get:
+  tags:
+    - Content - children and descendants
+  summary: Get content descendants
+  description: >-
+    Returns a map of the descendants of a piece of content. This is similar
+
+    to [Get content children](#api-content-id-child-get), except that this
+
+    method returns child pages at all levels, rather than just the direct
+
+    child pages.
+
+
+    A piece of content has different types of descendants, depending on its
+    type:
+
+
+    - `page`: descendant is `page`, `comment`, `attachment`
+
+    - `blogpost`: descendant is `comment`, `attachment`
+
+    - `attachment`: descendant is `comment`
+
+    - `comment`: descendant is `attachment`
+
+
+    The map will always include all descendant types that are valid for the
+    content.
+
+    However, if the content has no instances of a descendant type, the map will
+
+    contain an empty array for that descendant type.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'View' permission for the space, and permission to view the content if it
+
+    is a page.
+  operationId: getContentDescendants
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its descendants.
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the children to
+        expand, where:
+
+        - `attachment` returns all attachments for the content.
+        - `comments` returns all comments for the content.
+        - `page` returns all child pages of the content.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - attachment
+            - comment
+            - page
+  responses:
+    '200':
+      description: Returned if the requested descendants are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentChildren.yaml
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

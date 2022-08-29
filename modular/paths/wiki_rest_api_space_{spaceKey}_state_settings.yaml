@@ -1,0 +1,54 @@
+get:
+  tags:
+    - Content states
+  summary: Get content state settings for space
+  description: >-
+    Get object describing whether content states are allowed at all, if custom
+    content states or space content states
+
+    are restricted, and a list of space content states allowed for the space if
+    they are not restricted.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Space admin permission
+  operationId: getContentStateSettings
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to be queried for its content state settings.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: >-
+        Returned if the requested space exists, and user has space admin
+        permission.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentStateSettings.yaml
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+    '403':
+      description: Returned if user does not have space admin permission.
+    '404':
+      description: Returned if the space with given key can not be found.
+  security:
+    - oAuthDefinitions:
+        - read:confluence-space.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-space.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space.setting:confluence
+  x-atlassian-connect-scope: READ

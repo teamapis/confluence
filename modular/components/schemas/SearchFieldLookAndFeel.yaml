@@ -1,0 +1,10 @@
+required:
+  - backgroundColor
+  - color
+type: object
+nullable: true
+properties:
+  backgroundColor:
+    type: string
+  color:
+    type: string

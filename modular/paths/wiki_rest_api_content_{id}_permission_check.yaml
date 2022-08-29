@@ -1,0 +1,85 @@
+post:
+  tags:
+    - Content permissions
+  summary: Check content permissions
+  description: >-
+    Check if a user or a group can perform an operation to the specified
+    content. The `operation` to check
+
+    must be provided. The user’s account ID or the ID of the group can be
+    provided in the `subject` to check
+
+    permissions against a specified user or group. The following permission
+    checks are done to make sure that the
+
+    user or group has the proper access:
+
+
+    - site permissions
+
+    - space permissions
+
+    - content restrictions
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission) if
+    checking permission for self,
+
+    otherwise 'Confluence Administrator' global permission is required.
+  operationId: checkContentPermission
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to check permissions against.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The content permission request.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentPermissionRequest.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the permission check completed successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/PermissionCheckResponse.yaml
+    '400':
+      description: |-
+        Returned if;
+
+        - If any of the required fields are missing.
+        - If specified `subject` or `operation` is invalid.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: Returned if the user does not have permission perform the check.
+      content: {}
+    '404':
+      description: Returned if there is no content with the given ID.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.permission
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.permission
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content.permission:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: READ

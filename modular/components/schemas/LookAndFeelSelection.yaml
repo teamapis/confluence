@@ -1,0 +1,17 @@
+required:
+  - lookAndFeelType
+  - spaceKey
+type: object
+properties:
+  spaceKey:
+    type: string
+    description: |-
+      The key of the space for which the look and feel settings will be
+      set.
+  lookAndFeelType:
+    type: string
+    enum:
+      - global
+      - custom
+      - theme
+description: Look and feel selection

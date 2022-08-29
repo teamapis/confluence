@@ -1,0 +1,99 @@
+get:
+  tags:
+    - Search
+  summary: Search users
+  description: >-
+    Searches for users using user-specific queries from the
+
+    [Confluence Query Language
+    (CQL)](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).
+
+
+    Note that some user fields may be set to null depending on the user's
+    privacy settings.
+
+    These are: email, profilePicture, displayName, and timeZone.
+  operationId: searchUser
+  parameters:
+    - name: cql
+      in: query
+      description: >-
+        The CQL query to be used for the search. See
+
+        [Advanced Searching using
+        CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/)
+
+        for instructions on how to build a CQL query.
+
+
+        Example queries:
+                  cql=type=user will return all users
+                  cql=user="1234" will return user with accountId "1234"
+                  You can also use IN, NOT IN, != operators
+                  cql=user IN ("12", "34") will return users with accountids "12" and "34"
+                  cql=user.fullname~jo will return users with nickname/full name starting with "jo"
+                  cql=user.accountid="123" will return user with accountId "123"
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned users.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of user objects to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the user to
+        expand.
+
+
+        - `operations` returns the operations for the user, which are used
+
+        when setting permissions.
+
+        - `personalSpace` returns the personal space of the user.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    '200':
+      description: Returned if the requested results are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SearchPageResponseSearchResult.yaml
+    '400':
+      description: Returned if the CQL query cannot be parsed.
+      content: {}
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to access
+        Confluence.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:content-details:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

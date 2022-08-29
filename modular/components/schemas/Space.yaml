@@ -1,0 +1,97 @@
+required:
+  - _expandable
+  - _links
+  - key
+  - name
+  - status
+  - type
+nullable: true
+type: object
+properties:
+  id:
+    type: integer
+    format: int64
+  key:
+    type: string
+  name:
+    type: string
+  icon:
+    $ref: ./Icon.yaml
+  description:
+    type: object
+    properties:
+      plain:
+        $ref: ./SpaceDescription.yaml
+      view:
+        $ref: ./SpaceDescription.yaml
+      _expandable:
+        type: object
+        properties:
+          view:
+            type: string
+          plain:
+            type: string
+  homepage:
+    $ref: ./Content.yaml
+  type:
+    type: string
+  metadata:
+    type: object
+    properties:
+      labels:
+        $ref: ./LabelArray.yaml
+      _expandable:
+        type: object
+  operations:
+    type: array
+    items:
+      $ref: ./OperationCheckResult.yaml
+  permissions:
+    type: array
+    items:
+      $ref: ./SpacePermission.yaml
+  status:
+    type: string
+  settings:
+    $ref: ./SpaceSettings.yaml
+  theme:
+    $ref: ./Theme.yaml
+  lookAndFeel:
+    $ref: ./LookAndFeel.yaml
+  history:
+    required:
+      - createdDate
+    type: object
+    properties:
+      createdDate:
+        type: string
+        format: date-time
+      createdBy:
+        $ref: ./User.yaml
+  _expandable:
+    type: object
+    properties:
+      settings:
+        type: string
+      metadata:
+        type: string
+      operations:
+        type: string
+      lookAndFeel:
+        type: string
+      permissions:
+        type: string
+      icon:
+        type: string
+      description:
+        type: string
+      theme:
+        type: string
+      history:
+        type: string
+      homepage:
+        type: string
+      identifiers:
+        type: string
+  _links:
+    $ref: ./GenericLinks.yaml

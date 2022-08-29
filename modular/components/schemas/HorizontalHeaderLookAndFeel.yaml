@@ -1,0 +1,15 @@
+required:
+  - backgroundColor
+  - primaryNavigation
+type: object
+properties:
+  backgroundColor:
+    type: string
+  button:
+    $ref: ./ButtonLookAndFeel.yaml
+  primaryNavigation:
+    $ref: ./TopNavigationLookAndFeel.yaml
+  secondaryNavigation:
+    $ref: ./NavigationLookAndFeel.yaml
+  search:
+    $ref: ./SearchFieldLookAndFeel.yaml

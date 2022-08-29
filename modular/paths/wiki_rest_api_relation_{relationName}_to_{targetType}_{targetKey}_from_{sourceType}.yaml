@@ -1,0 +1,174 @@
+get:
+  tags:
+    - Relation
+  summary: Find source entities related to a target entity
+  description: |-
+    Returns all target entities that have a particular relationship to the
+    source entity. Note, relationships are one way.
+
+    For example, the following method finds all users that have a 'collaborator'
+    relationship to a piece of content with an ID of '1234':
+    `GET /wiki/rest/api/relation/collaborator/to/content/1234/from/user`
+    Note, 'collaborator' is an example custom relationship type.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to view both the target entity and source entity.
+  operationId: findSourcesForTarget
+  parameters:
+    - name: relationName
+      in: path
+      description: >-
+        The name of the relationship. This method supports relationships created
+        via
+
+        [Create
+        relationship](#api-wiki-rest-api-relation-relationname-from-sourcetype-sourcekey-to-targettype-targetkey-put).
+
+        Note, this method does not support 'like' or 'favourite' relationships.
+      required: true
+      schema:
+        type: string
+    - name: sourceType
+      in: path
+      description: The source entity type of the relationship.
+      required: true
+      schema:
+        type: string
+        enum:
+          - user
+          - content
+          - space
+    - name: targetType
+      in: path
+      description: The target entity type of the relationship.
+      required: true
+      schema:
+        type: string
+        enum:
+          - user
+          - content
+          - space
+    - name: targetKey
+      in: path
+      description: >-
+        The identifier for the target entity:
+
+
+        - If `targetType` is `user`, then specify either `current` (logged-in
+        user), the user key of the user, or
+
+        the account ID of the user. Note that the user key has been deprecated
+        in favor of the account ID for this parameter. See the
+
+        [migration
+        guide](https://developer.atlassian.com/cloud/confluence/deprecation-notice-user-privacy-api-migration-guide/)
+
+        for details.
+
+        - If `targetType` is 'content', then specify the content ID.
+
+        - If `targetType` is 'space', then specify the space key.
+      required: true
+      schema:
+        type: string
+    - name: sourceStatus
+      in: query
+      description: |-
+        The status of the source. This parameter is only used when the
+        `sourceType` is 'content'.
+      schema:
+        type: string
+    - name: targetStatus
+      in: query
+      description: |-
+        The status of the target. This parameter is only used when the
+        `targetType` is 'content'.
+      schema:
+        type: string
+    - name: sourceVersion
+      in: query
+      description: |-
+        The version of the source. This parameter is only used when the
+        `sourceType` is 'content' and the `sourceStatus` is 'historical'.
+      schema:
+        type: integer
+        format: int32
+    - name: targetVersion
+      in: query
+      description: |-
+        The version of the target. This parameter is only used when the
+        `targetType` is 'content' and the `targetStatus` is 'historical'.
+      schema:
+        type: integer
+        format: int32
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the response
+        object to expand.
+
+        - `relationData` returns information about the relationship, such as
+        who created it and when it was created.
+        - `source` returns the source entity.
+        - `target` returns the target entity.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - relationData
+            - source
+            - target
+    - name: start
+      in: query
+      description: The starting index of the returned relationships.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of relationships to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+  responses:
+    '200':
+      description: Returned if the requested relationships are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/RelationArray.yaml
+    '400':
+      description: Returned if the request is invalid.
+      content: {}
+    '403':
+      description: |-
+        Returned if the user does not have permission to view the
+        relationship
+      content: {}
+    '404':
+      description: Returned if the target entity does not exist.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:relation:confluence
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

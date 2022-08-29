@@ -1,0 +1,18 @@
+required:
+  - results
+  - size
+type: object
+properties:
+  results:
+    type: array
+    items:
+      $ref: ./LabeledContent.yaml
+  start:
+    type: integer
+    format: int32
+  limit:
+    type: integer
+    format: int32
+  size:
+    type: integer
+    format: int32

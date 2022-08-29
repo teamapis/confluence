@@ -1,0 +1,124 @@
+get:
+  tags:
+    - Content - children and descendants
+  summary: Get content descendants by type
+  description: >-
+    Returns all descendants of a given type, for a piece of content. This is
+
+    similar to [Get content children by type](#api-content-id-child-type-get),
+
+    except that this method returns child pages at all levels, rather than just
+
+    the direct child pages.
+
+
+    A piece of content has different types of descendants, depending on its
+    type:
+
+
+    - `page`: descendant is `page`, `comment`, `attachment`
+
+    - `blogpost`: descendant is `comment`, `attachment`
+
+    - `attachment`: descendant is `comment`
+
+    - `comment`: descendant is `attachment`
+
+
+    Custom content types that are provided by apps can also be returned.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'View' permission for the space, and permission to view the content if it
+
+    is a page.
+  operationId: getDescendantsOfType
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its descendants.
+      required: true
+      schema:
+        type: string
+    - name: type
+      in: path
+      description: The type of descendants to return.
+      required: true
+      schema:
+        type: string
+        enum:
+          - page
+          - comment
+          - attachment
+    - name: depth
+      in: query
+      description: >-
+        Filter the results to descendants upto a desired level of the content.
+        Note, the maximum value supported is 100. root level of the content
+        means immediate (level 1) descendants of the type requested. all
+        represents returning all descendants of the type requested.
+      schema:
+        type: string
+        default: all
+        enum:
+          - all
+          - root
+          - <any positive integer argument in the range of 1 and 100>
+    - $ref: ../components/parameters/contentExpand.yaml
+    - name: start
+      in: query
+      description: The starting index of the returned content.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of content to return per page. Note,
+        this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+  responses:
+    '200':
+      description: Returned if the requested content is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentArray.yaml
+    '400':
+      description: >-
+        Returned if;
+
+
+        - Any of the required request params are missing.
+
+        - The request is invalid such as negative start param, a format besides
+        int32 for limit etc.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

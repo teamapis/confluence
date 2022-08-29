@@ -1,0 +1,37 @@
+required:
+  - _links
+  - cqlQuery
+  - limit
+  - results
+  - searchDuration
+  - size
+  - start
+  - totalSize
+type: object
+properties:
+  results:
+    type: array
+    items:
+      $ref: ./SearchResult.yaml
+  start:
+    type: integer
+    format: int32
+  limit:
+    type: integer
+    format: int32
+  size:
+    type: integer
+    format: int32
+  totalSize:
+    type: integer
+    format: int32
+  cqlQuery:
+    type: string
+  searchDuration:
+    type: integer
+    format: int32
+  archivedResultCount:
+    type: integer
+    format: int32
+  _links:
+    $ref: ./GenericLinks.yaml

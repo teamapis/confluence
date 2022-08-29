@@ -1,0 +1,30 @@
+oneOf:
+  - type: object
+    required:
+      - results
+    properties:
+      results:
+        type: array
+        items:
+          $ref: ./ContentRestrictionUpdate.yaml
+      start:
+        type: integer
+        format: int32
+      limit:
+        type: integer
+        format: int32
+      size:
+        type: integer
+        format: int32
+      restrictionsHash:
+        type: string
+        description: >-
+          This property is used by the UI to figure out whether a set of
+          restrictions
+
+          has changed.
+      _links:
+        $ref: ./GenericLinks.yaml
+  - type: array
+    items:
+      $ref: ./ContentRestrictionUpdate.yaml

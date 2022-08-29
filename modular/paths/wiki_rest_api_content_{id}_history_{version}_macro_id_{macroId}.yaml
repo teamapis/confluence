@@ -1,0 +1,100 @@
+get:
+  tags:
+    - Content - macro body
+  summary: Get macro body by macro ID
+  description: >-
+    Returns the body of a macro in storage format, for the given macro ID.
+
+    This includes information like the name of the macro, the body of the macro,
+
+    and any macro parameters. This method is mainly used by Cloud apps.
+
+
+    About the macro ID: When a macro is created in a new version of content,
+
+    Confluence will generate a random ID for it, unless an ID is specified
+
+    (by an app). The macro ID will look similar to this:
+    '50884bd9-0cb8-41d5-98be-f80943c14f96'.
+
+    The ID is then persisted as new versions of content are created, and is
+
+    only modified by Confluence if there are conflicting IDs.
+
+
+    Note, to preserve backwards compatibility this resource will also match on
+
+    the hash of the macro body, even if a macro ID is found. This check will
+
+    eventually become redundant, as macro IDs are generated for pages and
+
+    transparently propagate out to all instances.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to view the content that the macro is in.
+  operationId: getMacroBodyByMacroId
+  parameters:
+    - name: id
+      in: path
+      description: The ID for the content that contains the macro.
+      required: true
+      schema:
+        type: string
+    - name: version
+      in: path
+      description: >-
+        The version of the content that contains the macro. Specifying `0` as
+        the `version` will return
+
+        the macro body for the latest content version.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: macroId
+      in: path
+      description: |-
+        The ID of the macro. This is usually passed by the app that the
+        macro is in. Otherwise, find the macro ID by querying the desired
+        content and version, then expanding the body in storage format.
+        For example, '/content/196611/version/7?expand=content.body.storage'.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested macro body is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/MacroInstance.yaml
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+        - The macro does not exist in the specified version.
+        - There is no macro matching the given macro ID or hash.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.all
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.all
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content.metadata:confluence
+  x-atlassian-connect-scope: READ

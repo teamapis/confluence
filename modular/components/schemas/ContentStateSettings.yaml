@@ -1,0 +1,20 @@
+required:
+  - contentStatesAllowed
+  - customContentStatesAllowed
+  - spaceContentStatesAllowed
+type: object
+properties:
+  contentStatesAllowed:
+    type: boolean
+    description: Whether users can place any content states on content
+  customContentStatesAllowed:
+    type: boolean
+    description: Whether users can place their custom states on content
+  spaceContentStatesAllowed:
+    type: boolean
+    description: Whether users can place space suggested states on content
+  spaceContentStates:
+    type: array
+    items:
+      $ref: ./ContentState.yaml
+    description: space suggested content states that users can choose from

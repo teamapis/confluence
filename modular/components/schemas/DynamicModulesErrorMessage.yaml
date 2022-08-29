@@ -1,0 +1,9 @@
+required:
+  - message
+type: object
+properties:
+  message:
+    type: string
+    description: The error message.
+example:
+  message: The request is not from a Connect app.

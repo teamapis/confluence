@@ -1,0 +1,115 @@
+get:
+  tags:
+    - Settings
+  summary: Get look and feel settings
+  description: |-
+    Returns the look and feel settings for the site or a single space. This
+    includes attributes such as the color scheme, padding, and border radius.
+
+    The look and feel settings for a space can be inherited from the global
+    look and feel settings or provided by a theme.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    None
+  operationId: getLookAndFeelSettings
+  parameters:
+    - name: spaceKey
+      in: query
+      description: |-
+        The key of the space for which the look and feel settings will be
+        returned. If this is not set, only the global look and feel settings
+        are returned.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested look and feel settings are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LookAndFeelSettings.yaml
+    '400':
+      description: Returned if `spaceKey` is invalid.
+      content: {}
+    '404':
+      description: Returned if there is no space with the given `spaceKey`.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - manage:confluence-configuration
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - manage:confluence-configuration
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:configuration:confluence
+        - read:space.setting:confluence
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Settings
+  summary: Select look and feel settings
+  description: |-
+    Sets the look and feel settings to the default (global) settings, the
+    custom settings, or the current theme's settings for a space.
+    The custom and theme settings can only be selected if there is already
+    a theme set for a space. Note, the default space settings are inherited
+    from the current global settings.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'Admin' permission for the space.
+  operationId: updateLookAndFeel
+  requestBody:
+    description: The look and feel type to be set.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/LookAndFeelSelection.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the look and feel settings were set.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LookAndFeelSelection.yaml
+    '400':
+      description: |-
+        Returned if;
+
+        - `spaceKey` is invalid.
+        - `lookAndFeelType` is invalid.
+      content: {}
+    '403':
+      description: |-
+        Returned if the calling user doesn't have permission to edit the
+        look and feel settings.
+      content: {}
+    '404':
+      description: Returned if there is no space with the given `spaceKey`.
+      content: {}
+    '409':
+      description: |-
+        Returned if `lookAndFeelType` is set to 'custom' or 'theme',
+        and a theme is not currently set for the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - manage:confluence-configuration
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - manage:confluence-configuration
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space.setting:confluence
+        - write:space.setting:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE

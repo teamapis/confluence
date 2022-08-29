@@ -1,0 +1,404 @@
+get:
+  tags:
+    - Content - attachments
+  summary: Get attachments
+  description: >-
+    Returns the attachments for a piece of content.
+
+
+    By default, the following objects are expanded: `metadata`.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to view the content. If the content is a blog post, 'View'
+    permission
+
+    for the space is required.
+  operationId: getAttachments
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its attachments.
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/contentExpand.yaml
+    - name: start
+      in: query
+      description: The starting index of the returned attachments.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of attachments to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+    - name: filename
+      in: query
+      description: Filter the results to attachments that match the filename.
+      schema:
+        type: string
+    - name: mediaType
+      in: query
+      description: Filter the results to attachments that match the media type.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested attachments are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentArray.yaml
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no parent content with the given ID.
+        - The calling user does not have permission to view the parent content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Content - attachments
+  summary: Create or update attachment
+  description: >-
+    Adds an attachment to a piece of content. If the attachment already exists
+
+    for the content, then the attachment is updated (i.e. a new version of the
+
+    attachment is created).
+
+
+    Note, you must set a `X-Atlassian-Token: nocheck` header on the request
+
+    for this method, otherwise it will be blocked. This protects against XSRF
+
+    attacks, which is necessary as this method accepts multipart/form-data.
+
+
+    The media type 'multipart/form-data' is defined in [RFC
+    7578](https://www.ietf.org/rfc/rfc7578.txt).
+
+    Most client libraries have classes that make it easier to implement
+
+    multipart posts, like the
+    [MultipartEntityBuilder](https://hc.apache.org/httpcomponents-client-5.1.x/current/httpclient5/apidocs/)
+
+    Java class provided by Apache HTTP Components.
+
+
+    Note, according to [RFC
+    7578](https://tools.ietf.org/html/rfc7578#section-4.5),
+
+    in the case where the form data is text,
+
+    the charset parameter for the "text/plain" Content-Type may be used to
+
+    indicate the character encoding used in that part. In the case of this
+
+    API endpoint, the `comment` body parameter should be sent with
+    `type=text/plain`
+
+    and `charset=utf-8` values. This will force the charset to be UTF-8.
+
+
+    Example: This curl command attaches a file ('example.txt') to a piece of
+
+    content (id='123') with a comment and `minorEdits`=true. If the
+    'example.txt'
+
+    file already exists, it will update it with a new version of the attachment.
+
+
+    ``` bash
+
+    curl -D- \
+      -u admin:admin \
+      -X PUT \
+      -H 'X-Atlassian-Token: nocheck' \
+      -F 'file=@"example.txt"' \
+      -F 'minorEdit="true"' \
+      -F 'comment="Example attachment comment"; type=text/plain; charset=utf-8' \
+      http://myhost/rest/api/content/123/child/attachment
+    ```
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to update the content.
+  operationId: createOrUpdateAttachments
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to add the attachment to.
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: |-
+        The status of the content that the attachment is being added to.
+        This should always be set to 'current'.
+      schema:
+        type: string
+        default: current
+        enum:
+          - current
+          - draft
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          required:
+            - file
+            - minorEdit
+          properties:
+            file:
+              type: string
+              description: |-
+                The relative location and name of the attachment to be added to
+                the content.
+              format: binary
+            comment:
+              type: string
+              description: >-
+                The comment for the attachment that is being added.
+
+                If you specify a comment, then every file must have a comment
+                and
+
+                the comments must be in the same order as the files.
+                Alternatively,
+
+                don't specify any comments.
+              format: binary
+            minorEdit:
+              type: string
+              description: >-
+                If `minorEdits` is set to 'true', no notification email or
+                activity stream
+
+                will be generated when the attachment is added to the content.
+              format: binary
+    required: true
+  responses:
+    '200':
+      description: Returned if the attachments were added to the content.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentArray.yaml
+    '403':
+      description: |-
+        Returned if;
+
+        - Attachments are disabled.
+        - The calling user does not have permission to add attachments to the
+        content.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - The requested content is not found.
+        - The user does not have permission to view it.
+        - The attachment exceeds the maximum configured attachment size.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-file
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-file
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+        - write:attachment:confluence
+  x-atlassian-connect-scope: WRITE
+post:
+  tags:
+    - Content - attachments
+  summary: Create attachment
+  description: >-
+    Adds an attachment to a piece of content. This method only adds a new
+
+    attachment. If you want to update an existing attachment, use
+
+    [Create or update attachments](#api-content-id-child-attachment-put).
+
+
+    Note, you must set a `X-Atlassian-Token: nocheck` header on the request
+
+    for this method, otherwise it will be blocked. This protects against XSRF
+
+    attacks, which is necessary as this method accepts multipart/form-data.
+
+
+    The media type 'multipart/form-data' is defined in [RFC
+    7578](https://www.ietf.org/rfc/rfc7578.txt).
+
+    Most client libraries have classes that make it easier to implement
+
+    multipart posts, like the
+    [MultipartEntityBuilder](https://hc.apache.org/httpcomponents-client-5.1.x/current/httpclient5/apidocs/)
+
+    Java class provided by Apache HTTP Components.
+
+
+    Note, according to [RFC
+    7578](https://tools.ietf.org/html/rfc7578#section-4.5),
+
+    in the case where the form data is text,
+
+    the charset parameter for the "text/plain" Content-Type may be used to
+
+    indicate the character encoding used in that part. In the case of this
+
+    API endpoint, the `comment` body parameter should be sent with
+    `type=text/plain`
+
+    and `charset=utf-8` values. This will force the charset to be UTF-8.
+
+
+    Example: This curl command attaches a file ('example.txt') to a container
+
+    (id='123') with a comment and `minorEdits`=true.
+
+
+    ``` bash
+
+    curl -D- \
+      -u admin:admin \
+      -X POST \
+      -H 'X-Atlassian-Token: nocheck' \
+      -F 'file=@"example.txt"' \
+      -F 'minorEdit="true"' \
+      -F 'comment="Example attachment comment"; type=text/plain; charset=utf-8' \
+      http://myhost/rest/api/content/123/child/attachment
+    ```
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to update the content.
+  operationId: createAttachment
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to add the attachment to.
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: The status of the content that the attachment is being added to.
+      schema:
+        type: string
+        default: current
+        enum:
+          - current
+          - draft
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          required:
+            - file
+            - minorEdit
+          properties:
+            file:
+              type: string
+              description: |-
+                The relative location and name of the attachment to be added to
+                the content.
+              format: binary
+            comment:
+              type: string
+              description: >-
+                The comment for the attachment that is being added.
+
+                If you specify a comment, then every file must have a comment
+                and
+
+                the comments must be in the same order as the files.
+                Alternatively,
+
+                don't specify any comments.
+              format: binary
+            minorEdit:
+              type: string
+              description: >-
+                If `minorEdits` is set to 'true', no notification email or
+                activity stream
+
+                will be generated when the attachment is added to the content.
+              format: binary
+    required: true
+  responses:
+    '200':
+      description: Returned if the attachments were added to the content.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentArray.yaml
+    '400':
+      description: >-
+        Returned if the content already has an attachment with the same
+        filename.
+      content: {}
+    '403':
+      description: |-
+        Returned if;
+
+        - Attachments are disabled in Confluence.
+        - The calling user does not have permission to add attachments to the
+        content.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - The requested content is not found.
+        - The user does not have permission to view it
+        - The attachment exceeds the maximum configured attachment size.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-file
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-file
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+        - write:attachment:confluence
+  x-atlassian-connect-scope: WRITE

@@ -1,0 +1,21 @@
+required:
+  - height
+  - isDefault
+  - path
+  - width
+type: object
+nullable: true
+properties:
+  path:
+    type: string
+  width:
+    type: integer
+    format: int32
+  height:
+    type: integer
+    format: int32
+  isDefault:
+    type: boolean
+description: >-
+  This object represents an icon. If used as a profilePicture, this may be
+  returned as null, depending on the user's privacy setting.

@@ -1,0 +1,18 @@
+required:
+  - id
+  - links
+type: object
+properties:
+  ari:
+    type: string
+    description: the ARI for the long task, based on its ID
+  id:
+    type: string
+    description: a unique identifier for the long task
+  links:
+    type: object
+    additionalProperties: true
+    properties:
+      status:
+        type: string
+        description: The URL to retrive status of long task.

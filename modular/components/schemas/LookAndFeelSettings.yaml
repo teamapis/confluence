@@ -1,0 +1,17 @@
+required:
+  - custom
+  - global
+  - selected
+type: object
+properties:
+  selected:
+    type: string
+    enum:
+      - global
+      - custom
+  global:
+    $ref: ./LookAndFeel.yaml
+  theme:
+    $ref: ./LookAndFeel.yaml
+  custom:
+    $ref: ./LookAndFeel.yaml

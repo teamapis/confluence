@@ -1,0 +1,85 @@
+get:
+  tags:
+    - Label info
+  summary: Get label information
+  description: >-
+    Returns label information and a list of contents associated with the label.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission). Only
+    contents
+
+    that the user is permitted to view is returned.
+  operationId: getAllLabelContent
+  parameters:
+    - name: name
+      in: query
+      description: Name of the label to query.
+      required: true
+      schema:
+        type: string
+        default: null
+    - name: type
+      in: query
+      description: The type of contents that are to be returned.
+      schema:
+        type: string
+        default: null
+        enum:
+          - page
+          - blogpost
+          - attachment
+          - page_template
+    - name: start
+      in: query
+      description: The starting offset for the results.
+      schema:
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: The number of results to be returned.
+      schema:
+        type: integer
+        format: int32
+        default: 200
+  responses:
+    '200':
+      description: Returned if the query fetches zero or more results.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LabelDetails.yaml
+    '400':
+      description: |-
+        Returned if no label name is provide or
+        if content type provided in the query is invalid.
+      content: {}
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view
+        any content including label info.
+      content: {}
+    '404':
+      description: >-
+        Returned if the lable name is invalid or if no label is found for a
+        given label.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:label:confluence
+        - read:content:confluence
+  x-atlassian-connect-scope: READ

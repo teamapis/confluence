@@ -1,0 +1,16 @@
+required:
+  - highlightColor
+type: object
+properties:
+  color:
+    type: string
+    nullable: true
+  highlightColor:
+    type: string
+  hoverOrFocus:
+    type: object
+    properties:
+      backgroundColor:
+        type: string
+      color:
+        type: string

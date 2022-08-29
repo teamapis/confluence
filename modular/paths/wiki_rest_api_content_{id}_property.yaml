@@ -1,0 +1,176 @@
+get:
+  tags:
+    - Content properties
+  summary: Get content properties
+  description: >-
+    Returns the properties for a piece of content. For more information
+
+    about content properties, see [Confluence entity
+    properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'View' permission for the space, and permission to view the content if it is
+    a page.
+  operationId: getContentProperties
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its properties.
+      required: true
+      schema:
+        type: string
+    - name: key
+      in: query
+      description: The key of the content property.
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the content to
+        expand. By default, the `version` object is expanded.
+
+        - `content` returns the content that the property is stored against.
+        - `version` returns information about the version of the property, such
+        as the version number, when it was created, etc.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - content
+            - version
+    - name: start
+      in: query
+      description: The starting index of the returned properties.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of properties to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 10
+  responses:
+    '200':
+      description: Returned if the requested properties are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentPropertyArray.yaml
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-props
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-props
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Content properties
+  summary: Create content property
+  description: >-
+    Creates a property for an existing piece of content. For more information
+
+    about content properties, see [Confluence entity
+    properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+
+    This is the same as [Create content property for
+    key](#api-content-id-property-key-post)
+
+    except that the key is specified in the request body instead of as a
+
+    path parameter.
+
+
+    Content properties can also be added when creating a new piece of content
+
+    by including them in the `metadata.properties` of the request.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to update the content.
+  operationId: createContentProperty
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to add the property to.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The content property to be created.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentPropertyCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the content property is created.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentProperty.yaml
+    '400':
+      description: |-
+        Returned if;
+
+        - The content already has a property with the given key.
+        - The key is too long.
+        - The key is empty.
+      content: {}
+    '403':
+      description: |-
+        Returned if the user does not have permission to edit the content
+        with the given ID.
+      content: {}
+    '413':
+      description: Returned if the value is too long.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-props
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-props
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content.property:confluence
+        - write:content.property:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE

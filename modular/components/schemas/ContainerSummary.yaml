@@ -1,0 +1,9 @@
+required:
+  - displayUrl
+  - title
+type: object
+properties:
+  title:
+    type: string
+  displayUrl:
+    type: string

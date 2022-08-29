@@ -1,0 +1,7 @@
+description: Look and feel settings returned after an update.
+allOf:
+  - $ref: ./LookAndFeel.yaml
+  - type: object
+    properties:
+      _links:
+        $ref: ./GenericLinks.yaml

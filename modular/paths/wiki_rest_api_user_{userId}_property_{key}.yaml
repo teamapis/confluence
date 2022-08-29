@@ -1,0 +1,317 @@
+get:
+  tags:
+    - Experimental
+  summary: Get user property
+  description: >-
+    Returns the property corresponding to `key` for a user. For more information
+
+    about user properties, see [Confluence entity
+    properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+    `Note`, these properties stored against a user are on a Confluence site
+    level and not space/content level.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getUserProperty
+  parameters:
+    - name: userId
+      in: path
+      description: The account ID of the user to be queried for its properties.
+      required: true
+      schema:
+        type: string
+    - name: key
+      in: path
+      description: The key of the user property.
+      required: true
+      schema:
+        type: string
+        pattern: ^[-_a-zA-Z0-9]+$
+  responses:
+    '200':
+      description: Returned if the requested properties are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserProperty.yaml
+    '400':
+      description: |-
+        Returned if;
+
+        - The key is too long.
+        - Request has malformed syntax or userId is not a valid user id.
+      content: {}
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+      content: {}
+    '403':
+      description: Returned if the user does not have the correct permissions.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no user with the given user ID
+        - There is no user property with the given key
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:user.property:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:user.property:confluence
+  x-experimental: true
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Experimental
+  summary: Update user property
+  description: >-
+    Updates a property for the given user. Note, you cannot update the key of a
+    user property, only the value.
+
+    For more information about user properties, see
+
+    [Confluence entity
+    properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+    `Note`, these properties stored against a user are on a Confluence site
+    level and not space/content level.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: updateUserProperty
+  parameters:
+    - name: userId
+      in: path
+      description: >-
+        The account ID of the user. The accountId uniquely identifies the user
+        across all Atlassian
+
+        products. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192
+      required: true
+      schema:
+        type: string
+    - name: key
+      in: path
+      description: The key of the user property.
+      required: true
+      schema:
+        type: string
+        pattern: ^[-_a-zA-Z0-9]+$
+  requestBody:
+    description: The user property to be updated.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UserPropertyUpdate.yaml
+    required: true
+  responses:
+    '204':
+      description: Returned if the user property is updated.
+    '400':
+      description: |-
+        Returned if;
+
+        - The key is too long.
+        - The value is empty.
+        - The value is too long.
+        - Request has malformed syntax or userId is not a valid user id.
+      content: {}
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+      content: {}
+    '403':
+      description: Returned if the user does not have the correct permissions.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no user property with the given key.
+        - There is no user with the given user id.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:user.property:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:user.property:confluence
+  x-codegen-request-body-name: body
+  x-experimental: true
+  x-atlassian-connect-scope: WRITE
+post:
+  tags:
+    - Experimental
+  summary: Create user property by key
+  description: >-
+    Creates a property for a user. For more information  about user properties,
+    see [Confluence entity properties]
+
+    (https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+    `Note`, these properties stored against a user are on a Confluence site
+    level and not space/content level.
+
+
+    `Note:` the number of properties which could be created per app in a tenant
+    for each user might be
+
+    restricted by fixed system limits.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: createUserProperty
+  parameters:
+    - name: userId
+      in: path
+      description: >-
+        The account ID of the user. The accountId uniquely identifies the user
+        across all Atlassian
+
+        products. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192
+      required: true
+      schema:
+        type: string
+    - name: key
+      in: path
+      description: The key of the user property.
+      required: true
+      schema:
+        type: string
+        pattern: ^[-_a-zA-Z0-9]+$
+  requestBody:
+    description: The user property to be created.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UserPropertyCreate.yaml
+    required: true
+  responses:
+    '201':
+      description: Returned if the user property is created.
+    '400':
+      description: |-
+        Returned if;
+
+        - The key is too long.
+        - The value is empty.
+        - The value is too long.
+        - Request has malformed syntax or userId is not a valid user id.
+      content: {}
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+      content: {}
+    '403':
+      description: Returned if the user does not have the correct permissions.
+      content: {}
+    '404':
+      description: Returned if there is no user with the given user id.
+      content: {}
+    '409':
+      description: Returned if the key already exists for the user.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:user.property:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:user.property:confluence
+  x-codegen-request-body-name: body
+  x-experimental: true
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Experimental
+  summary: Delete user property
+  description: >-
+    Deletes a property for the given user.
+
+    For more information about user properties, see
+
+    [Confluence entity
+    properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+    `Note`, these properties stored against a user are on a Confluence site
+    level and not space/content level.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: deleteUserProperty
+  parameters:
+    - name: userId
+      in: path
+      description: >-
+        The account ID of the user. The accountId uniquely identifies the user
+        across all Atlassian
+
+        products. For example, 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192
+      required: true
+      schema:
+        type: string
+    - name: key
+      in: path
+      description: The key of the user property.
+      required: true
+      schema:
+        type: string
+        pattern: ^[-_a-zA-Z0-9]+$
+  responses:
+    '204':
+      description: Returned if the user property is deleted.
+    '400':
+      description: |-
+        Returned if;
+
+        - The key is too long.
+        - Request has malformed syntax or userId is not a valid user id.
+      content: {}
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+      content: {}
+    '403':
+      description: Returned if the user does not have the correct permissions.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no user property with the given key
+        - There is no user with the given user id
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:user.property:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:user.property:confluence
+  x-experimental: true
+  x-atlassian-connect-scope: WRITE

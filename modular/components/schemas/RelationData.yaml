@@ -1,0 +1,9 @@
+type: object
+properties:
+  createdBy:
+    $ref: ./User.yaml
+  createdDate:
+    type: string
+    format: date-time
+  friendlyCreatedDate:
+    type: string

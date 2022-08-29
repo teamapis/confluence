@@ -1,0 +1,59 @@
+post:
+  tags:
+    - Space
+  summary: Create private space
+  description: |-
+    Creates a new space that is only visible to the creator. This method is
+    the same as the [Create space](#api-space-post) method with permissions
+    set to the current user only. Note, currently you cannot set space
+    labels when creating a space.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'Create Space(s)' global permission.
+  operationId: createPrivateSpace
+  requestBody:
+    description: The space to be created.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/SpaceCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the space is created.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Space.yaml
+    '400':
+      description: |-
+        Returned if any of the following is true:
+
+        - The request is invalid.
+        - The space already exists.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: Returned if the user does not have permission to create a space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-space
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-space
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space-details:confluence
+        - write:space:confluence
+        - write:space.permission:confluence
+  x-codegen-request-body-name: SpacePrivateCreate
+  x-atlassian-connect-scope: WRITE

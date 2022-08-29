@@ -1,0 +1,74 @@
+post:
+  tags:
+    - Space permissions
+  summary: Add new custom content permission to space
+  description: >-
+    Adds new custom content permission to space.
+
+
+    If the permission to be added is a group permission, the group can be
+    identified
+
+    by its group name or group id.
+
+
+    Note: Only apps can access this REST resource and only make changes to the
+    respective app permissions.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Admin' permission for the space.
+  operationId: addCustomContentPermissions
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to be queried for its content.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The permissions to be created.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/SpacePermissionCustomContent.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the requested content is returned.
+      content: {}
+    '400':
+      description: |-
+        Used for various errors. Such as:
+        - Permission already exists for the given user or group.
+        - 'read space' permission doesn't exist for the given user or group.
+        - No group found with the given groupName or groupId
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: Returned if the user isn't authorized.
+      content: {}
+    '404':
+      description: |-
+        Returned if any of the following is true:
+        - There is no space with the given key.
+        - The calling user does not have permission to view the space.
+      content: {}
+  x-codegen-request-body-name: body
+  security:
+    - oAuthDefinitions:
+        - read:space.permission:confluence
+        - write:space.permission:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:space.permission:confluence
+        - write:space.permission:confluence
+  x-atlassian-connect-scope: WRITE

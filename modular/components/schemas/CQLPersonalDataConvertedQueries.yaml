@@ -1,0 +1,12 @@
+required:
+  - queryStrings
+type: object
+properties:
+  queryStrings:
+    type: array
+    description: |-
+      The list of converted CQL query strings with account IDs in
+      place of user identifiers.
+    items:
+      type: string
+description: The converted CQL queries.

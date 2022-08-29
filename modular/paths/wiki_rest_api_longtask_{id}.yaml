@@ -1,0 +1,50 @@
+get:
+  tags:
+    - Long-running task
+  summary: Get long-running task
+  description: |-
+    Returns information about an active long-running task (e.g. space export),
+    such as how long it has been running and the percentage of the task that
+    has completed.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getTask
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the task.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested task is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LongTaskStatusWithLinks.yaml
+    '401':
+      description: Returned if the calling user is not logged in to Confluence.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no task with the given ID.
+        - The calling user does not have permission to view the task.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-space.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-space.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content.metadata:confluence
+  x-atlassian-connect-scope: READ

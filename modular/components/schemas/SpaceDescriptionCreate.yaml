@@ -1,0 +1,20 @@
+required:
+  - plain
+type: object
+nullable: true
+properties:
+  plain:
+    type: object
+    additionalProperties: true
+    properties:
+      value:
+        type: string
+        description: The space description.
+      representation:
+        type: string
+        description: Set to 'plain'.
+description: >-
+  The description of the new/updated space. Note, only the 'plain'
+  representation
+
+  can be used for the description when creating or updating a space.

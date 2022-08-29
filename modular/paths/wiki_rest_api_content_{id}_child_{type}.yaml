@@ -1,0 +1,108 @@
+get:
+  tags:
+    - Content - children and descendants
+  summary: Get content children by type
+  description: >-
+    Returns all children of a given type, for a piece of content.
+
+    A piece of content has different types of child content, depending on its
+    type:
+
+
+    - `page`: child content is `page`, `comment`, `attachment`
+
+    - `blogpost`: child content is `comment`, `attachment`
+
+    - `attachment`: child content is `comment`
+
+    - `comment`: child content is `attachment`
+
+
+    Custom content types that are provided by apps can also be returned.
+
+
+    Note, this method only returns direct children. To return children at all
+
+    levels, use [Get descendants by type](#api-content-id-descendant-type-get).
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'View' permission for the space,
+
+    and permission to view the content if it is a page.
+  operationId: getContentChildrenByType
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its children.
+      required: true
+      schema:
+        type: string
+    - name: type
+      in: path
+      description: The type of children to return.
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/contentExpand.yaml
+    - name: parentVersion
+      in: query
+      description: |-
+        The version of the parent content to retrieve children for.
+        Currently, this only works for the latest version.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: start
+      in: query
+      description: The starting index of the returned content.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of content to return per page. Note,
+        this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+  responses:
+    '200':
+      description: Returned if the requested content is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentArray.yaml
+    '400':
+      description: >-
+        Returned if the parent type and desired child content type are not
+        compatible.
+
+        Eg: Cannot find `page` children of a `blogpost`.
+      content: {}
+    '404':
+      description: |-
+        Returned if:
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

@@ -1,0 +1,78 @@
+put:
+  tags:
+    - Content - attachments
+  summary: Update attachment properties
+  description: |-
+    Updates the attachment properties, i.e. the non-binary data of an attachment
+    like the filename, media-type, comment, and parent container.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to update the content.
+  operationId: updateAttachmentProperties
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content that the attachment is attached to.
+      required: true
+      schema:
+        type: string
+    - name: attachmentId
+      in: path
+      description: The ID of the attachment to update.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The details of the attachment to be updated.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/Content.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the attachment is updated.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Content.yaml
+    '400':
+      description: |-
+        Returned if;
+
+        - The attachment id is invalid.
+        - The attachment version number is invalid.
+      content: {}
+    '403':
+      description: |-
+        Returned if;
+
+        - The calling user is not permitted to update or move the attachment.
+        - The attachment is being moved to an invalid content type.
+      content: {}
+    '404':
+      description: Returned if no attachment is found for the attachment ID.
+      content: {}
+    '409':
+      description: |-
+        Returned if the version of the supplied attachment does not match
+        the version of the attachment stored in the database.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-file
+        - write:confluence-props
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-file
+        - write:confluence-props
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+        - write:attachment:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE

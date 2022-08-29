@@ -1,0 +1,37 @@
+get:
+  tags:
+    - Content states
+  summary: Get Custom Content States
+  description: |-
+    Get custom content states that authenticated user has created.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**
+    Must have user authentication.
+  operationId: getCustomContentStates
+  responses:
+    '200':
+      description: >-
+        Custom Content States that user has crated. Returned if user
+        authenticated.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/ContentState.yaml
+    '401':
+      description: Returned if user is not authenticated.
+  security:
+    - oAuthDefinitions:
+        - read:user.property:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:user.property:confluence
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:user.property:confluence
+  x-atlassian-connect-scope: INACCESSIBLE

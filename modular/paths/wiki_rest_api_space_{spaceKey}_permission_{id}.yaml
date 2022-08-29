@@ -1,0 +1,66 @@
+delete:
+  tags:
+    - Space permissions
+  summary: Remove a space permission
+  description: >-
+    Removes a space permission. Note that removing Read Space permission for a
+    user or group will remove all
+
+    the space permissions for that user or group.
+
+
+    Note: Apps cannot access this REST resource - including when utilizing user
+    impersonation.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Admin' permission for the space.
+  operationId: removePermission
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to be queried for its content.
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: Id of the permission to be deleted.
+      required: true
+      schema:
+        type: integer
+  responses:
+    '204':
+      description: Permission successfully removed.
+      content: {}
+    '400':
+      description: |-
+        Used for various errors. Such as:
+        - All of the admin permissions cannot be removed from a space.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: Returned if the user isn't authorized.
+      content: {}
+    '404':
+      description: |-
+        Returned if any of the following is true:
+        - There is no permission with the given id.
+        - There is no space with the given key.
+        - The calling user does not have permission to view the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:space.permission:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:space.permission:confluence
+  x-atlassian-connect-scope: INACCESSIBLE

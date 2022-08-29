@@ -1,0 +1,14 @@
+required:
+  - contentId
+  - contentType
+  - title
+type: object
+properties:
+  contentType:
+    $ref: ./LabeledContentType.yaml
+  contentId:
+    type: integer
+    format: int64
+  title:
+    type: string
+    description: Title of the content.

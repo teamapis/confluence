@@ -1,0 +1,59 @@
+required:
+  - minorEdit
+  - number
+  - when
+type: object
+nullable: true
+additionalProperties: true
+properties:
+  by:
+    $ref: ./User.yaml
+  when:
+    type: string
+    format: date-time
+    nullable: true
+  friendlyWhen:
+    type: string
+    nullable: true
+  message:
+    type: string
+    nullable: true
+  number:
+    type: integer
+    format: int32
+    description: Set this to the current version number incremented by one
+  minorEdit:
+    description: |-
+      If `minorEdit` is set to 'true', no notification email or activity
+      stream will be generated for the change.
+    type: boolean
+  content:
+    $ref: ./Content.yaml
+  collaborators:
+    $ref: ./UsersUserKeys.yaml
+  _expandable:
+    type: object
+    properties:
+      content:
+        type: string
+      collaborators:
+        type: string
+  _links:
+    $ref: ./GenericLinks.yaml
+  contentTypeModified:
+    type: boolean
+    description: True if content type is modifed in this version (e.g. page to blog)
+  confRev:
+    type: string
+    nullable: true
+    description: >-
+      The revision id provided by confluence to be used as a revision in
+      Synchrony
+  syncRev:
+    type: string
+    nullable: true
+    description: The revision id provided by Synchrony
+  syncRevSource:
+    type: string
+    nullable: true
+    description: Source of the synchrony revision

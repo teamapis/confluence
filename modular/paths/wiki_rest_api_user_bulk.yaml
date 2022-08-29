@@ -1,0 +1,71 @@
+get:
+  tags:
+    - Users
+  summary: Get multiple users using ids
+  description: |-
+    Returns user details for the ids provided in request.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getBulkUserLookup
+  parameters:
+    - name: accountId
+      in: query
+      description: A list of accountId's of users to be returned.
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the user to
+        expand.
+
+          - `operations` returns the operations that the user is allowed to do.
+          - personalSpace returns the user's personal space, if it exists.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - operations
+            - personalSpace
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of results returned.
+        Currently API returns 200 results max.
+        If more that 200 ids are passed first 200 will be returned.
+      schema:
+        maximum: 200
+        minimum: 1
+        type: integer
+        format: int32
+  responses:
+    '200':
+      description: Returned if, the list of users is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/BulkUserLookupArray.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to use
+        Confluence.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-user
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-user
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

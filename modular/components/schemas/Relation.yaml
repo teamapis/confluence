@@ -1,0 +1,30 @@
+required:
+  - _links
+  - name
+type: object
+properties:
+  name:
+    type: string
+  relationData:
+    $ref: ./RelationData.yaml
+  source:
+    oneOf:
+      - $ref: ./Content.yaml
+      - $ref: ./User.yaml
+      - $ref: ./Space.yaml
+  target:
+    oneOf:
+      - $ref: ./Content.yaml
+      - $ref: ./User.yaml
+      - $ref: ./Space.yaml
+  _expandable:
+    type: object
+    properties:
+      relationData:
+        type: string
+      source:
+        type: string
+      target:
+        type: string
+  _links:
+    $ref: ./GenericLinks.yaml

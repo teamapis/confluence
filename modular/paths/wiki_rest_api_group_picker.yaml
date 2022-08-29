@@ -1,0 +1,67 @@
+get:
+  tags:
+    - Group
+  summary: Search groups by partial query
+  description: Get search results of groups by partial query provided.
+  operationId: searchGroups
+  parameters:
+    - name: query
+      in: query
+      description: the search term used to query results.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned groups.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of groups to return per page.
+        Note, this is restricted to a maximum limit of 200 groups.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 200
+    - name: shouldReturnTotalSize
+      in: query
+      description: >-
+        Whether to include total size parameter in the results.
+
+        Note, fetching total size property is an expensive operation; use it if
+        your use case needs this value.
+      schema:
+        type: boolean
+        default: false
+  responses:
+    '200':
+      description: Returns a full JSON representation of group collection.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GroupArrayWithLinks.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view
+        groups.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-groups
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-groups
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:group:confluence
+  x-atlassian-connect-scope: READ

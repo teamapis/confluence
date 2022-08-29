@@ -1,0 +1,41 @@
+get:
+  tags:
+    - Themes
+  summary: Get theme
+  description: |-
+    Returns a theme. This includes information about the theme name,
+    description, and icon.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: None
+  operationId: getTheme
+  parameters:
+    - name: themeKey
+      in: path
+      description: The key of the theme to be returned.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested theme is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Theme.yaml
+    '404':
+      description: Returned if there is no theme with the given key.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - manage:confluence-configuration
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - manage:confluence-configuration
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:configuration:confluence
+  x-atlassian-connect-scope: READ

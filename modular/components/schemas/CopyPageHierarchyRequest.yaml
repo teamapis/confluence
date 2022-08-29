@@ -1,0 +1,32 @@
+required:
+  - destinationPageId
+type: object
+properties:
+  copyAttachments:
+    type: boolean
+    description: If set to `true`, attachments are copied to the destination page.
+    default: false
+  copyPermissions:
+    type: boolean
+    description: If set to `true`, page permissions are copied to the destination page.
+    default: false
+  copyProperties:
+    type: boolean
+    description: If set to `true`, content properties are copied to the destination page.
+    default: false
+  copyLabels:
+    type: boolean
+    description: If set to `true`, labels are copied to the destination page.
+    default: false
+  copyCustomContents:
+    type: boolean
+    description: If set to `true`, custom contents are copied to the destination page.
+    default: false
+  copyDescendants:
+    type: boolean
+    description: If set to `true`, descendants are copied to the destination page.
+    default: true
+  destinationPageId:
+    $ref: ./ContentId.yaml
+  titleOptions:
+    $ref: ./CopyPageHierarchyTitleOptions.yaml

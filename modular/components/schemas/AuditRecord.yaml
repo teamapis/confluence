@@ -1,0 +1,73 @@
+required:
+  - affectedObject
+  - associatedObjects
+  - author
+  - category
+  - changedValues
+  - creationDate
+  - description
+  - remoteAddress
+  - summary
+  - sysAdmin
+type: object
+properties:
+  author:
+    required:
+      - displayName
+      - operations
+      - type
+    type: object
+    properties:
+      type:
+        type: string
+        default: user
+        enum:
+          - user
+      displayName:
+        type: string
+      operations:
+        nullable: true
+        type: object
+        properties: {}
+      username:
+        $ref: ./GenericUserName.yaml
+      userKey:
+        $ref: ./GenericUserKey.yaml
+      accountId:
+        $ref: ./GenericAccountId.yaml
+      accountType:
+        type: string
+      externalCollaborator:
+        type: boolean
+      isExternalCollaborator:
+        type: boolean
+        description: Whether the user is an external collaborator user
+      publicName:
+        type: string
+        description: The public name or nickname of the user. Will always contain a value.
+  remoteAddress:
+    type: string
+  creationDate:
+    type: integer
+    description: The creation date-time of the audit record, as a timestamp.
+    format: int64
+  summary:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  sysAdmin:
+    type: boolean
+  superAdmin:
+    type: boolean
+  affectedObject:
+    $ref: ./AffectedObject.yaml
+  changedValues:
+    type: array
+    items:
+      $ref: ./ChangedValue.yaml
+  associatedObjects:
+    type: array
+    items:
+      $ref: ./AffectedObject.yaml

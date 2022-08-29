@@ -1,0 +1,7 @@
+required:
+  - themeKey
+type: object
+properties:
+  themeKey:
+    type: string
+    description: The key of the theme to be set as the space theme.

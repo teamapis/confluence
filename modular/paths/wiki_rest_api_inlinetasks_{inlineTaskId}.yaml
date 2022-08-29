@@ -1,0 +1,99 @@
+get:
+  tags:
+    - Inline tasks
+  summary: Get inline task based on global ID
+  description: |-
+    Returns inline task based on the global ID.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to view the content associated with the task.
+  operationId: getTaskById
+  parameters:
+    - name: inlineTaskId
+      in: path
+      description: Global ID of the inline task
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the inline task was found given the global ID
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Task.yaml
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+    '403':
+      description: >-
+        Returned if the user does not have permission to view the content
+        associated with the task.
+    '404':
+      description: Returned if task could not be found with the given global ID.
+  security:
+    - oAuthDefinitions:
+        - read:inlinetask:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:inlinetask:confluence
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Inline tasks
+  summary: Update inline task given global ID
+  description: |-
+    Updates an inline tasks status given its global ID
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to update the content associated with the task.
+  operationId: updateTaskById
+  parameters:
+    - name: inlineTaskId
+      in: path
+      description: Global ID of the inline task to update
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The updated task status.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/TaskStatusUpdate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the inline task was successfully updated.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Task.yaml
+    '400':
+      description: Returned if client input is invalid.
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+    '403':
+      description: >-
+        Returned if the user does not have permission to update the content
+        associated with the task.
+    '404':
+      description: Returned if task could not be found with given global ID.
+  security:
+    - oAuthDefinitions:
+        - read:inlinetask:confluence
+        - write:inlinetask:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:inlinetask:confluence
+        - write:inlinetask:confluence
+  x-atlassian-connect-scope: WRITE

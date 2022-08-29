@@ -1,0 +1,265 @@
+get:
+  tags:
+    - Content
+  summary: Get content
+  description: >-
+    Returns all content in a Confluence instance.
+
+
+    By default, the following objects are expanded: `space`, `history`,
+    `version`.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+
+    Only content that the user has permission to view will be returned.
+  operationId: getContent
+  parameters:
+    - name: type
+      in: query
+      description: |-
+        The type of content to return. For example:
+          - page
+          - blogpost
+      schema:
+        type: string
+        default: page
+    - name: spaceKey
+      in: query
+      description: The key of the space to be queried for its content.
+      schema:
+        type: string
+    - name: title
+      in: query
+      description: >-
+        The title of the page to be returned. Required for <code>page</code>
+        type.
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: >-
+        Filter the results to a set of content based on their status. If set to
+        `any`,
+
+        content with any status is returned. Note, the `historical` status is
+        currently
+
+        not supported.
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        default:
+          - current
+        enum:
+          - current
+          - trashed
+          - deleted
+          - historical
+          - draft
+          - any
+    - name: postingDay
+      in: query
+      description: |-
+        The posting date of the blog post to be returned. Required for
+        <code>blogpost</code> type. Format: <code>yyyy-mm-dd</code>.
+      schema:
+        type: string
+    - $ref: ../components/parameters/contentExpandWithSubExpandLimit.yaml
+    - name: trigger
+      in: query
+      description: >-
+        If set to `viewed`, the request will trigger a 'viewed' event for the
+        content.
+
+        When this event is triggered, the page/blogpost will appear on the
+        'Recently visited'
+
+        tab of the user's Confluence dashboard.
+      schema:
+        type: string
+        enum:
+          - viewed
+    - name: orderby
+      in: query
+      description: >-
+        Orders the content by a particular field. Specify the field and sort
+        direction for
+
+        this parameter, as follows: 'fieldpath asc/desc'. For example,
+        'history.createdDate desc'.
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned content.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of content objects to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+  responses:
+    '200':
+      description: Returned if the requested list of content is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentArray.yaml
+    '400':
+      description: Returned if sub-expansions limit exceeds.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: >-
+        Returned if the user does not have correct permission to read this
+        content.
+      content: {}
+    '404':
+      description: |-
+        Returned if the calling user does not have permission to view the
+        requested content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Content
+  summary: Create content
+  description: >-
+    Creates a new piece of content or publishes an existing draft.
+
+
+    To publish a draft, add the `id` and `status` properties to the body of the
+    request.
+
+    Set the `id` to the ID of the draft and set the `status` to 'current'. When
+    the
+
+    request is sent, a new piece of content will be created and the metadata
+    from the
+
+    draft will be transferred into it.
+
+
+    By default, the following objects are expanded: `space`, `history`,
+    `version`.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**: 'Add'
+    permission for the
+
+    space that the content will be created in, and permission to view the draft
+    if publishing a draft.
+  operationId: createContent
+  parameters:
+    - name: status
+      in: query
+      description: Filter the returned content by status.
+      schema:
+        type: string
+        default: current
+    - $ref: ../components/parameters/contentExpandWithSubExpandLimit.yaml
+  requestBody:
+    description: >-
+      The new content to be created. Set the `representation` to the name of the
+      body
+
+      format type. For example, if you use `storage` for the body format, set
+
+      '`representation`=`storage`'. See
+
+      [Confluence storage format](https://confluence.atlassian.com/x/AJkiLw).
+
+
+      If you are not sure how to generate the different formats, you can create
+      a page in the
+
+      Confluence application, retrieve the content using [Get
+      content](#api-content-get),
+
+      and expand the desired content format, e.g. `expand=body.storage`.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the content is created.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Content.yaml
+    '400':
+      description: |-
+        Returned if;
+        - The content type is invalid.
+        - The sub-expansions limit exceeds.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: >-
+        Returned if;
+
+
+        - The space that the content is being created in does not exist.
+
+        - If the requesting user does not have permission to create content in
+        it.
+      content: {}
+    '413':
+      description: >-
+        Returned if request is too large.  Requests for this resource can be at
+        most 5242880 bytes
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+        - write:content:confluence
+  x-codegen-request-body-name: content
+  x-atlassian-connect-scope: WRITE

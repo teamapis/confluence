@@ -1,0 +1,143 @@
+get:
+  tags:
+    - Themes
+  summary: Get space theme
+  description: >-
+    Returns the theme selected for a space, if one is set. If no space
+
+    theme is set, this means that the space is inheriting the global look
+
+    and feel settings.
+
+
+    **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
+    ‘View’ permission for the space.
+  operationId: getSpaceTheme
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to be queried for its theme.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested theme is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Theme.yaml
+    '404':
+      description: |-
+        Returned if any of the following is true:
+
+        - There is no space with the given key.
+        - The space does not have a theme assigned to it.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-space.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-space.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space.setting:confluence
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Themes
+  summary: Set space theme
+  description: |-
+    Sets the theme for a space. Note, if you want to reset the space theme to
+    the default Confluence theme, use the 'Reset space theme' method instead
+    of this method.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'Admin' permission for the space.
+  operationId: setSpaceTheme
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to set the theme for.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ThemeUpdate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the theme was set for the space.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Theme.yaml
+    '403':
+      description: Returned if the theme key is invalid.
+      content: {}
+    '404':
+      description: Returned if there is no space with the given key.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-space
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-space
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space.setting:confluence
+        - write:space.setting:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Themes
+  summary: Reset space theme
+  description: |-
+    Resets the space theme. This means that the space will inherit the
+    global look and feel settings
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'Admin' permission for the space.
+  operationId: resetSpaceTheme
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to reset the theme for.
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returned if the theme was reset for the space.
+      content: {}
+    '404':
+      description: Returned if there is no space with the given key.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-space
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-space
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:space.setting:confluence
+  x-atlassian-connect-scope: DELETE

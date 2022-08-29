@@ -1,0 +1,75 @@
+get:
+  tags:
+    - Group
+  summary: Get group members
+  description: |-
+    Returns the users that are members of a group.
+
+    Use updated Get group API
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getGroupMembersByGroupId
+  parameters:
+    - name: groupId
+      in: path
+      description: The id of the group to be queried for its members.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned users.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of users to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 200
+    - name: shouldReturnTotalSize
+      in: query
+      description: >-
+        Whether to include total size parameter in the results.
+
+        Note, fetching total size property is an expensive operation; use it if
+        your use case needs this value.
+      schema:
+        type: boolean
+        default: false
+  responses:
+    '200':
+      description: Returned if the requested users are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserArray.yaml
+    '400':
+      description: Returned if given limit is greater than 200
+      content: {}
+    '403':
+      description: Returned if the calling user does not have permission to view users.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-groups
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-groups
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:group:confluence
+        - read:user:confluence
+  x-atlassian-connect-scope: READ

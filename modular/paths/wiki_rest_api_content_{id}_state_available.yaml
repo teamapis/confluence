@@ -1,0 +1,57 @@
+get:
+  tags:
+    - Content states
+  summary: Gets available content states for content.
+  description: >-
+    Gets content states that are available for the content to be set as.
+
+    Will return all enabled Space Content States.
+
+    Will only return most the 3 most recently published custom content states to
+    match UI editor list.
+
+    To get all custom content states, use the /content-states endpoint.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to edit the content.
+  operationId: getAvailableContentStates
+  parameters:
+    - name: id
+      in: path
+      description: id of content to get available states for
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the content is found and permission is valid.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AvailableContentStates.yaml
+    '400':
+      description: Invalid status for content. Must be in [current,draft,archived].
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+    '403':
+      description: Returned if user does not have content edit permission.
+    '404':
+      description: Returned if the content with given id can not be found.
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:content:confluence
+  x-atlassian-connect-scope: READ

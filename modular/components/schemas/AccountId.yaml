@@ -1,0 +1,6 @@
+required:
+  - accountId
+type: object
+properties:
+  accountId:
+    type: string

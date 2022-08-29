@@ -1,0 +1,7 @@
+type: object
+nullable: true
+required:
+  - spaceIdentifier
+properties:
+  spaceIdentifier:
+    type: string

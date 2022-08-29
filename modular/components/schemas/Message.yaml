@@ -1,0 +1,14 @@
+required:
+  - args
+type: object
+additionalProperties: true
+properties:
+  translation:
+    type: string
+  args:
+    type: array
+    items:
+      oneOf:
+        - type: string
+        - type: object
+          additionalProperties: true

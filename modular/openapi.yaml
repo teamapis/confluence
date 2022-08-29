@@ -1,0 +1,558 @@
+openapi: 3.0.1
+info:
+  title: The Confluence Cloud REST API
+  description: >-
+    This document describes the REST API and resources provided by Confluence.
+    The REST APIs are for developers who want to integrate Confluence into their
+    application and for administrators who want to script interactions with the
+    Confluence server.Confluence's REST APIs provide access to resources (data
+    entities) via URI paths. To use a REST API, your application will make an
+    HTTP request and parse the response. The response format is JSON. Your
+    methods will be the standard HTTP methods like GET, PUT, POST and DELETE.
+    Because the REST API is based on open standards, you can use any web
+    development language to access the API.
+  termsOfService: https://atlassian.com/terms/
+  version: 1.0.0
+externalDocs:
+  description: The online and complete version of the Confluence Cloud REST API docs.
+  url: https://developer.atlassian.com/cloud/confluence/rest/
+servers:
+  - url: //your-domain.atlassian.net
+tags:
+  - name: Audit
+    description: ''
+  - name: Analytics
+    description: ''
+  - name: Content
+    description: ''
+  - name: Content - attachments
+    description: ''
+  - name: Content body
+    description: ''
+  - name: Content - children and descendants
+    description: ''
+  - name: Content - macro body
+    description: ''
+  - name: Content comments
+    description: ''
+  - name: Content labels
+    description: ''
+  - name: Content permissions
+    description: ''
+  - name: Content properties
+    description: ''
+  - name: Content restrictions
+    description: ''
+  - name: Content states
+    description: ''
+  - name: Content versions
+    description: ''
+  - name: Content watches
+    description: ''
+  - name: Dynamic modules
+    description: ''
+  - name: Experimental
+    description: APIs in this section can change without any prior deprecation notice.
+  - name: Group
+    description: >-
+      **[WARNING](https://support.atlassian.com/user-management/docs/create-and-update-groups/)
+      The standard Atlassian group names are default names only and can be
+      edited or deleted.**  For example, an admin or Atlassian support could
+      delete the default group jira-software-users or rename it to jsw-users at
+      any point.
+  - name: Inline tasks
+    description: ''
+  - name: Label info
+    description: ''
+  - name: Long-running task
+    description: ''
+  - name: Relation
+    description: ''
+  - name: Search
+    description: ''
+  - name: Settings
+    description: ''
+  - name: Space
+    description: ''
+  - name: Space permissions
+    description: ''
+  - name: Space properties
+    description: ''
+  - name: Space settings
+    description: ''
+  - name: Template
+    description: ''
+  - name: Themes
+    description: ''
+  - name: Users
+    description: ''
+paths:
+  /wiki/rest/api/audit:
+    $ref: paths/wiki_rest_api_audit.yaml
+  /wiki/rest/api/audit/export:
+    $ref: paths/wiki_rest_api_audit_export.yaml
+  /wiki/rest/api/audit/retention:
+    $ref: paths/wiki_rest_api_audit_retention.yaml
+  /wiki/rest/api/audit/since:
+    $ref: paths/wiki_rest_api_audit_since.yaml
+  /wiki/rest/api/content:
+    $ref: paths/wiki_rest_api_content.yaml
+  /wiki/rest/api/content/archive:
+    $ref: paths/wiki_rest_api_content_archive.yaml
+  /wiki/rest/api/content/blueprint/instance/{draftId}:
+    $ref: paths/wiki_rest_api_content_blueprint_instance_{draftId}.yaml
+  /wiki/rest/api/content/search:
+    $ref: paths/wiki_rest_api_content_search.yaml
+  /wiki/rest/api/content/{id}:
+    $ref: paths/wiki_rest_api_content_{id}.yaml
+  /wiki/rest/api/content/{id}/pageTree:
+    $ref: paths/wiki_rest_api_content_{id}_pageTree.yaml
+  /wiki/rest/api/content/{id}/child:
+    $ref: paths/wiki_rest_api_content_{id}_child.yaml
+  /wiki/rest/api/content/{pageId}/move/{position}/{targetId}:
+    $ref: paths/wiki_rest_api_content_{pageId}_move_{position}_{targetId}.yaml
+  /wiki/rest/api/content/{id}/child/attachment:
+    $ref: paths/wiki_rest_api_content_{id}_child_attachment.yaml
+  /wiki/rest/api/content/{id}/child/attachment/{attachmentId}:
+    $ref: paths/wiki_rest_api_content_{id}_child_attachment_{attachmentId}.yaml
+  /wiki/rest/api/content/{id}/child/attachment/{attachmentId}/data:
+    $ref: paths/wiki_rest_api_content_{id}_child_attachment_{attachmentId}_data.yaml
+  /wiki/rest/api/content/{id}/child/attachment/{attachmentId}/download:
+    $ref: >-
+      paths/wiki_rest_api_content_{id}_child_attachment_{attachmentId}_download.yaml
+  /wiki/rest/api/content/{id}/child/comment:
+    $ref: paths/wiki_rest_api_content_{id}_child_comment.yaml
+  /wiki/rest/api/content/{id}/child/{type}:
+    $ref: paths/wiki_rest_api_content_{id}_child_{type}.yaml
+  /wiki/rest/api/content/{id}/descendant:
+    $ref: paths/wiki_rest_api_content_{id}_descendant.yaml
+  /wiki/rest/api/content/{id}/descendant/{type}:
+    $ref: paths/wiki_rest_api_content_{id}_descendant_{type}.yaml
+  /wiki/rest/api/content/{id}/history:
+    $ref: paths/wiki_rest_api_content_{id}_history.yaml
+  /wiki/rest/api/content/{id}/history/{version}/macro/id/{macroId}:
+    $ref: paths/wiki_rest_api_content_{id}_history_{version}_macro_id_{macroId}.yaml
+  /wiki/rest/api/content/{id}/label:
+    $ref: paths/wiki_rest_api_content_{id}_label.yaml
+  /wiki/rest/api/content/{id}/label/{label}:
+    $ref: paths/wiki_rest_api_content_{id}_label_{label}.yaml
+  /wiki/rest/api/content/{id}/notification/child-created:
+    $ref: paths/wiki_rest_api_content_{id}_notification_child-created.yaml
+  /wiki/rest/api/content/{id}/notification/created:
+    $ref: paths/wiki_rest_api_content_{id}_notification_created.yaml
+  /wiki/rest/api/content/{id}/pagehierarchy/copy:
+    $ref: paths/wiki_rest_api_content_{id}_pagehierarchy_copy.yaml
+  /wiki/rest/api/content/{id}/copy:
+    $ref: paths/wiki_rest_api_content_{id}_copy.yaml
+  /wiki/rest/api/content/{id}/permission/check:
+    $ref: paths/wiki_rest_api_content_{id}_permission_check.yaml
+  /wiki/rest/api/content/{id}/property:
+    $ref: paths/wiki_rest_api_content_{id}_property.yaml
+  /wiki/rest/api/content/{id}/property/{key}:
+    $ref: paths/wiki_rest_api_content_{id}_property_{key}.yaml
+  /wiki/rest/api/content/{id}/restriction:
+    $ref: paths/wiki_rest_api_content_{id}_restriction.yaml
+  /wiki/rest/api/content/{id}/restriction/byOperation:
+    $ref: paths/wiki_rest_api_content_{id}_restriction_byOperation.yaml
+  /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}:
+    $ref: >-
+      paths/wiki_rest_api_content_{id}_restriction_byOperation_{operationKey}.yaml
+  /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/group/{groupName}:
+    $ref: >-
+      paths/wiki_rest_api_content_{id}_restriction_byOperation_{operationKey}_group_{groupName}.yaml
+  /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}:
+    $ref: >-
+      paths/wiki_rest_api_content_{id}_restriction_byOperation_{operationKey}_byGroupId_{groupId}.yaml
+  /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/user:
+    $ref: >-
+      paths/wiki_rest_api_content_{id}_restriction_byOperation_{operationKey}_user.yaml
+  /wiki/rest/api/content/{id}/state:
+    $ref: paths/wiki_rest_api_content_{id}_state.yaml
+  /wiki/rest/api/content/{id}/state/available:
+    $ref: paths/wiki_rest_api_content_{id}_state_available.yaml
+  /wiki/rest/api/content/{id}/version:
+    $ref: paths/wiki_rest_api_content_{id}_version.yaml
+  /wiki/rest/api/content/{id}/version/{versionNumber}:
+    $ref: paths/wiki_rest_api_content_{id}_version_{versionNumber}.yaml
+  /wiki/rest/api/content-states:
+    $ref: paths/wiki_rest_api_content-states.yaml
+  /wiki/rest/api/contentbody/convert/{to}:
+    $ref: paths/wiki_rest_api_contentbody_convert_{to}.yaml
+  /wiki/rest/api/inlinetasks/search:
+    $ref: paths/wiki_rest_api_inlinetasks_search.yaml
+  /wiki/rest/api/inlinetasks/{inlineTaskId}:
+    $ref: paths/wiki_rest_api_inlinetasks_{inlineTaskId}.yaml
+  /wiki/rest/api/label:
+    $ref: paths/wiki_rest_api_label.yaml
+  /wiki/rest/api/group:
+    $ref: paths/wiki_rest_api_group.yaml
+  /wiki/rest/api/group/by-name:
+    $ref: paths/wiki_rest_api_group_by-name.yaml
+  /wiki/rest/api/group/by-id:
+    $ref: paths/wiki_rest_api_group_by-id.yaml
+  /wiki/rest/api/group/{groupName}:
+    $ref: paths/wiki_rest_api_group_{groupName}.yaml
+  /wiki/rest/api/group/member:
+    $ref: paths/wiki_rest_api_group_member.yaml
+  /wiki/rest/api/group/{groupName}/member:
+    $ref: paths/wiki_rest_api_group_{groupName}_member.yaml
+  /wiki/rest/api/group/picker:
+    $ref: paths/wiki_rest_api_group_picker.yaml
+  /wiki/rest/api/group/userByGroupId:
+    $ref: paths/wiki_rest_api_group_userByGroupId.yaml
+  /wiki/rest/api/group/{groupId}/membersByGroupId:
+    $ref: paths/wiki_rest_api_group_{groupId}_membersByGroupId.yaml
+  /wiki/rest/api/group/user:
+    $ref: paths/wiki_rest_api_group_user.yaml
+  /wiki/rest/api/longtask:
+    $ref: paths/wiki_rest_api_longtask.yaml
+  /wiki/rest/api/longtask/{id}:
+    $ref: paths/wiki_rest_api_longtask_{id}.yaml
+  /wiki/rest/api/relation/{relationName}/from/{sourceType}/{sourceKey}/to/{targetType}:
+    $ref: >-
+      paths/wiki_rest_api_relation_{relationName}_from_{sourceType}_{sourceKey}_to_{targetType}.yaml
+  /wiki/rest/api/relation/{relationName}/from/{sourceType}/{sourceKey}/to/{targetType}/{targetKey}:
+    $ref: >-
+      paths/wiki_rest_api_relation_{relationName}_from_{sourceType}_{sourceKey}_to_{targetType}_{targetKey}.yaml
+  /wiki/rest/api/relation/{relationName}/to/{targetType}/{targetKey}/from/{sourceType}:
+    $ref: >-
+      paths/wiki_rest_api_relation_{relationName}_to_{targetType}_{targetKey}_from_{sourceType}.yaml
+  /wiki/rest/api/search:
+    $ref: paths/wiki_rest_api_search.yaml
+  /wiki/rest/api/search/user:
+    $ref: paths/wiki_rest_api_search_user.yaml
+  /wiki/rest/api/settings/lookandfeel:
+    $ref: paths/wiki_rest_api_settings_lookandfeel.yaml
+  /wiki/rest/api/settings/lookandfeel/custom:
+    $ref: paths/wiki_rest_api_settings_lookandfeel_custom.yaml
+  /wiki/rest/api/settings/lookandfeel/selected:
+    $ref: paths/wiki_rest_api_settings_lookandfeel_selected.yaml
+  /wiki/rest/api/settings/systemInfo:
+    $ref: paths/wiki_rest_api_settings_systemInfo.yaml
+  /wiki/rest/api/settings/theme:
+    $ref: paths/wiki_rest_api_settings_theme.yaml
+  /wiki/rest/api/settings/theme/selected:
+    $ref: paths/wiki_rest_api_settings_theme_selected.yaml
+  /wiki/rest/api/settings/theme/{themeKey}:
+    $ref: paths/wiki_rest_api_settings_theme_{themeKey}.yaml
+  /wiki/rest/api/space:
+    $ref: paths/wiki_rest_api_space.yaml
+  /wiki/rest/api/space/_private:
+    $ref: paths/wiki_rest_api_space__private.yaml
+  /wiki/rest/api/space/{spaceKey}:
+    $ref: paths/wiki_rest_api_space_{spaceKey}.yaml
+  /wiki/rest/api/space/{spaceKey}/content:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_content.yaml
+  /wiki/rest/api/space/{spaceKey}/permission:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_permission.yaml
+  /wiki/rest/api/space/{spaceKey}/permission/custom-content:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_permission_custom-content.yaml
+  /wiki/rest/api/space/{spaceKey}/permission/{id}:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_permission_{id}.yaml
+  /wiki/rest/api/space/{spaceKey}/content/{type}:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_content_{type}.yaml
+  /wiki/rest/api/space/{spaceKey}/property:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_property.yaml
+  /wiki/rest/api/space/{spaceKey}/property/{key}:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_property_{key}.yaml
+  /wiki/rest/api/space/{spaceKey}/settings:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_settings.yaml
+  /wiki/rest/api/space/{spaceKey}/state:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_state.yaml
+  /wiki/rest/api/space/{spaceKey}/state/settings:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_state_settings.yaml
+  /wiki/rest/api/space/{spaceKey}/theme:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_theme.yaml
+  /wiki/rest/api/space/{spaceKey}/watch:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_watch.yaml
+  /wiki/rest/api/space/{spaceKey}/label:
+    $ref: paths/wiki_rest_api_space_{spaceKey}_label.yaml
+  /wiki/rest/api/template:
+    $ref: paths/wiki_rest_api_template.yaml
+  /wiki/rest/api/template/blueprint:
+    $ref: paths/wiki_rest_api_template_blueprint.yaml
+  /wiki/rest/api/template/page:
+    $ref: paths/wiki_rest_api_template_page.yaml
+  /wiki/rest/api/template/{contentTemplateId}:
+    $ref: paths/wiki_rest_api_template_{contentTemplateId}.yaml
+  /wiki/rest/api/user:
+    $ref: paths/wiki_rest_api_user.yaml
+  /wiki/rest/api/user/anonymous:
+    $ref: paths/wiki_rest_api_user_anonymous.yaml
+  /wiki/rest/api/user/current:
+    $ref: paths/wiki_rest_api_user_current.yaml
+  /wiki/rest/api/user/memberof:
+    $ref: paths/wiki_rest_api_user_memberof.yaml
+  /wiki/rest/api/user/bulk:
+    $ref: paths/wiki_rest_api_user_bulk.yaml
+  /wiki/rest/api/user/watch/content/{contentId}:
+    $ref: paths/wiki_rest_api_user_watch_content_{contentId}.yaml
+  /wiki/rest/api/user/watch/label/{labelName}:
+    $ref: paths/wiki_rest_api_user_watch_label_{labelName}.yaml
+  /wiki/rest/api/user/watch/space/{spaceKey}:
+    $ref: paths/wiki_rest_api_user_watch_space_{spaceKey}.yaml
+  /wiki/rest/api/user/email:
+    $ref: paths/wiki_rest_api_user_email.yaml
+  /wiki/rest/api/user/email/bulk:
+    $ref: paths/wiki_rest_api_user_email_bulk.yaml
+  /wiki/rest/api/user/bulk/migration:
+    $ref: paths/wiki_rest_api_user_bulk_migration.yaml
+  /atlassian-connect/1/app/module/dynamic:
+    $ref: paths/atlassian-connect_1_app_module_dynamic.yaml
+  /wiki/rest/api/analytics/content/{contentId}/views:
+    $ref: paths/wiki_rest_api_analytics_content_{contentId}_views.yaml
+  /wiki/rest/api/analytics/content/{contentId}/viewers:
+    $ref: paths/wiki_rest_api_analytics_content_{contentId}_viewers.yaml
+  /wiki/rest/api/user/{userId}/property:
+    $ref: paths/wiki_rest_api_user_{userId}_property.yaml
+  /wiki/rest/api/user/{userId}/property/{key}:
+    $ref: paths/wiki_rest_api_user_{userId}_property_{key}.yaml
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: You can access this resource via basic auth.
+      scheme: basic
+    oAuthDefinitions:
+      type: oauth2
+      description: This API uses OAuth 2 with the authorizationCode grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.atlassian.com/authorize
+          tokenUrl: https://auth.atlassian.com/oauth/token
+          scopes:
+            read:confluence-content.all: >-
+              Read all content, including content body (expansions permitted).
+              Note, APIs using this scope may also return data allowed by
+              read:confluence-space.summary. However, this scope is not a
+              substitute for read:confluence-space.summary.
+            read:confluence-content.permission: Read content permissions.
+            read:confluence-content.summary: >-
+              Read a summary of the content, which is the content without
+              expansions. Note, APIs using this scope may also return data
+              allowed by read:confluence-space.summary. However, this scope is
+              not a substitute for read:confluence-space.summary.
+            write:confluence-content: Permits the creation of pages, blogs, comments and questions.
+            read:confluence-space.summary: Read a summary of space information without expansions.
+            write:confluence-space: Create, update and delete space information.
+            write:confluence-file: Upload attachments.
+            read:confluence-props: Read content properties.
+            write:confluence-props: Write content properties.
+            search:confluence: >-
+              Search Confluence. Note, APIs using this scope may also return
+              data allowed by read:confluence-space.summary and
+              read:confluence-content.summary. However, this scope is not a
+              substitute for read:confluence-space.summary or
+              read:confluence-content.summary.
+            manage:confluence-configuration: Manage global settings.
+            read:confluence-groups: Read user groups.
+            write:confluence-groups: Create, remove and update user groups.
+            read:confluence-user: Read users.
+            readonly:content.attachment:confluence: >-
+              Download attachments of a Confluence page or blogpost that you
+              have access to.
+            read:content:confluence: View content.
+            read:content-details:confluence: View content details.
+            write:content:confluence: Create and update content.
+            delete:content:confluence: Delete content.
+            read:space-details:confluence: View space details.
+            read:analytics.content:confluence: View analytics for content.
+            read:audit-log:confluence: View audit records.
+            write:audit-log:confluence: Create audit records.
+            read:configuration:confluence: View Confluence settings.
+            write:configuration:confluence: Update Confluence settings.
+            read:page:confluence: View pages.
+            write:page:confluence: Create and update pages.
+            delete:page:confluence: Delete pages.
+            read:blogpost:confluence: View blogposts.
+            write:blogpost:confluence: Create and update blogposts.
+            delete:blogpost:confluence: Delete blogposts.
+            read:custom-content:confluence: View custom content.
+            write:custom-content:confluence: Create and update custom content.
+            delete:custom-content:confluence: Delete custom content.
+            read:attachment:confluence: View and download content attachments.
+            write:attachment:confluence: Create and update attachments.
+            delete:attachment:confluence: Delete attachments.
+            read:comment:confluence: View comments.
+            write:comment:confluence: Create and update comments.
+            delete:comment:confluence: Delete comments.
+            read:template:confluence: View content templates.
+            write:template:confluence: Create, update and delete content templates.
+            read:label:confluence: View labels.
+            write:label:confluence: Add and remove labels.
+            read:content.permission:confluence: Check content permissions.
+            read:content.property:confluence: View content properties.
+            write:content.property:confluence: Create, update and delete content properties.
+            read:content.restriction:confluence: View content restrictions.
+            write:content.restriction:confluence: Update content restrictions.
+            read:content.metadata:confluence: View content summaries.
+            read:watcher:confluence: View content watchers.
+            write:watcher:confluence: Add and remove content watchers.
+            read:group:confluence: View groups.
+            write:group:confluence: Create and delete groups.
+            read:inlinetask:confluence: View tasks.
+            write:inlinetask:confluence: Update tasks.
+            read:relation:confluence: View entity relationships.
+            write:relation:confluence: Create and update entity relationships.
+            read:space:confluence: View spaces.
+            write:space:confluence: Create and update spaces.
+            delete:space:confluence: Delete spaces.
+            read:space.permission:confluence: View space permissions.
+            write:space.permission:confluence: Update space permissions.
+            read:space.property:confluence: View space properties.
+            write:space.property:confluence: Create, update and delete space properties.
+            read:user.property:confluence: View user properties.
+            write:user.property:confluence: Create, update and delete user properties.
+            read:space.setting:confluence: View space settings.
+            write:space.setting:confluence: Update space settings.
+            read:user:confluence: View user details.
+x-atlassian-narrative:
+  documents:
+    - title: About
+      anchor: about
+      body: >-
+        This is the reference for the Confluence Cloud REST API. This API is the
+        primary way to get and
+
+        modify data in Confluence Cloud, whether you are developing an app or
+        any other integration.
+
+        Use it to interact with Confluence entities, like pages and blog posts,
+        spaces, users, groups,
+
+        and more.
+    - title: Authentication and authorization
+      anchor: auth
+      body: >-
+        **Authentication:** If you are building a Cloud app, authentication is
+        implemented via JWT (see [Authentication for
+        apps](https://developer.atlassian.com/cloud/confluence/authentication-for-apps/)).
+        Otherwise, if you are authenticating directly against the REST API, the
+        REST API supports basic auth (see [Basic auth for REST
+        APIs](https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/)).
+
+
+        **Authorization:** If you are building a Cloud app, authorization can be
+        implemented by
+        [scopes](https://developer.atlassian.com/cloud/confluence/scopes/) or by
+        [OAuth 2.0 user
+        impersonation](https://developer.atlassian.com/cloud/confluence/oauth-2-jwt-bearer-tokens-for-apps).
+        Otherwise, if you are making calls directly against the REST API,
+        authorization is based on the user used in the authentication process.
+
+
+        See [Security
+        overview](https://developer.atlassian.com/cloud/jira/platform/security-overview/)
+        for more details on authentication and authorization.
+    - title: Status codes
+      anchor: status-code
+      body: >-
+        The Confluence REST API uses the [standard HTTP status
+        codes](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html).
+
+
+        Responses that return an error status code will also return a response
+        body, similar to the following:
+
+        ```json
+
+        {
+          "statusCode": 404,
+          "data": {
+            "authorized": false,
+            "valid": false,
+            "errors": [
+              {
+                "message": {
+                  "translation": "This is an example error message.",
+                  "args": []
+                }
+              }
+            ],
+            "successful": false
+          },
+          "message": "This is an example error message."
+        }
+
+        ```
+    - title: Using the REST API
+      anchor: using
+      body: >-
+        **Expansion:** The Confluence REST API uses resource expansion: some
+        parts of a resource are not returned unless explicitly specified. This
+        simplifies responses and minimizes network traffic.
+
+
+        To expand part of a resource in a request, use the `expand` query
+        parameter and specify the entities to be expanded. If you need to expand
+        nested entities, use the `.` dot notation. For example, the following
+        request will expand information about the requested content's space and
+        labels:
+
+        ```
+
+        GET /wiki/rest/api/content/{id}?expand=space,metadata.labels
+
+        ```
+
+        **Pagination:** The Confluence REST API uses pagination: a method that
+        returns a response with multiple objects can only return a limited
+        number at one time. This limits the size of responses and conserves
+        server resources.
+
+
+        Use the 'limit' and 'start' query parameters to specify pagination:
+
+
+        - `limit` is the number of objects to return per page. This may be
+        restricted by system limits.
+
+        - `start` is the index of the first item returned in the page of
+        results. The base index is 0.
+
+
+        For example, the following request will return ten content objects,
+        starting from the fifth object.
+
+        ```
+
+        GET /wiki/rest/api/content?start=4&limit=10
+
+        ```
+
+        **Special headers:**
+
+
+        - `X-Atlassian-Token: no-check` request header must be specified for
+        methods
+
+        that are protected from Cross Site Request Forgery (XSRF/CSRF) attacks.
+        This is
+
+        stated in the method description, if required. For more information, see
+        this
+
+        [KB
+        article](https://confluence.atlassian.com/cloudkb/xsrf-check-failed-when-calling-cloud-apis-826874382.html).
+    - title: Capabilities
+      anchor: capabilities
+      body: >-
+        **Webhooks:** A webhook is a user-defined callback over HTTP. You can
+        use Confluence webhooks to notify your app or web application when
+        certain events occur in Confluence. For example, when a page is created
+        or updated. To learn more, see
+        [Webhooks](https://developer.atlassian.com/cloud/confluence/modules/webhook/).
+
+
+        **Content properties:** Content properties are a key-value storage
+        associated with a piece of Confluence content. If you are building an
+        app, this is one form of persistence that you can use. You can use the
+        Confluence REST API to get, update, and delete content properties. To
+        learn more, see [Content properties in the REST
+        API](https://developer.atlassian.com/cloud/confluence/content-properties/).
+
+
+        **CQL:** The Confluence Query Language (CQL) allows you to perform
+        complex searches for content using an SQL-like syntax in the `search`
+        resource. To learn more, see [Advanced searching using
+        CQL](https://developer.atlassian.com/cloud/confluence/advanced-searching-using-cql/).

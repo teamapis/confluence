@@ -1,0 +1,252 @@
+get:
+  tags:
+    - Content labels
+  summary: Get labels for content
+  description: >-
+    Returns the labels on a piece of content.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'View' permission for the space and permission to view the content if it is
+    a page.
+  operationId: getLabelsForContent
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its labels.
+      required: true
+      schema:
+        type: string
+    - name: prefix
+      in: query
+      description: >-
+        Filters the results to labels with the specified prefix. If this
+        parameter
+
+        is not specified, then labels with any prefix will be returned.
+
+
+        - `global` prefix is used by default when a user adds a label
+
+        via the UI.
+
+        - `my` prefix can be explicitly added by a user when adding a label
+
+        via the UI, e.g. 'my:example-label'. Also, when a page is selected as
+
+        a favourite, the 'my:favourite' label is automatically added.
+
+        - `team` can used when adding labels via [Add labels to
+        content](#api-content-id-label-post)
+
+        but is not used in the UI.
+      schema:
+        type: string
+        enum:
+          - global
+          - my
+          - team
+    - name: start
+      in: query
+      description: The starting index of the returned labels.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of labels to return per page. Note,
+        this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 200
+  responses:
+    '200':
+      description: Returned if the requested labels are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LabelArray.yaml
+    '403':
+      description: Returned if the calling user can view but not edit the content.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:label:confluence
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Content labels
+  summary: Add labels to content
+  description: >-
+    Adds labels to a piece of content. Does not modify the existing labels.
+
+
+    Notes:
+
+
+    - Labels can also be added when creating content ([Create
+    content](#api-content-post)).
+
+    - Labels can be updated when updating content ([Update
+    content](#api-content-id-put)).
+
+    This will delete the existing labels and replace them with the labels in
+
+    the request.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to update the content.
+  operationId: addLabelsToContent
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content that will have labels added to it.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The labels to add to the content.
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - $ref: ../components/schemas/LabelCreateArray.yaml
+            - $ref: ../components/schemas/LabelCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the labels are added to the content.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LabelArray.yaml
+    '400':
+      description: >-
+        Returned if;
+
+
+        - The body contains labels with invalid characters or too many
+        characters.
+
+        - The body contains too many labels.
+
+        - The target content would contain too many labels after the operation.
+
+        - The calling user does not have permission to edit labels.
+      content: {}
+    '403':
+      description: Returned if the calling user can view but not edit the content.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:label:confluence
+        - write:label:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Content labels
+  summary: Remove label from content using query parameter
+  description: >-
+    Removes a label from a piece of content. This is similar to
+
+    [Remove label from content](#api-content-id-label-label-delete)
+
+    except that the label name is specified via a query parameter.
+
+
+    Use this method if the label name has "/" characters, as
+
+    [Remove label from content using query
+    parameter](#api-content-id-label-delete)
+
+    does not accept "/" characters for the label name.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to update the content.
+  operationId: removeLabelFromContentUsingQueryParameter
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content that the label will be removed from.
+      required: true
+      schema:
+        type: string
+    - name: name
+      in: query
+      description: The name of the label to be removed.
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returned if the label is removed. The response body will be empty.
+      content: {}
+    '403':
+      description: Returned if the calling user can view but not edit the content.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:label:confluence
+  x-atlassian-connect-scope: WRITE

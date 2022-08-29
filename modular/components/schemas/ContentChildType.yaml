@@ -1,0 +1,46 @@
+type: object
+properties:
+  attachment:
+    required:
+      - _links
+      - value
+    type: object
+    properties:
+      value:
+        type: boolean
+      _links:
+        $ref: ./GenericLinks.yaml
+  comment:
+    required:
+      - _links
+      - value
+    type: object
+    properties:
+      value:
+        type: boolean
+      _links:
+        $ref: ./GenericLinks.yaml
+  page:
+    required:
+      - _links
+      - value
+    type: object
+    properties:
+      value:
+        type: boolean
+      _links:
+        $ref: ./GenericLinks.yaml
+  _expandable:
+    type: object
+    properties:
+      all:
+        type: object
+      attachment:
+        type: object
+      comment:
+        type: object
+      page:
+        type: object
+description: |-
+  Shows whether a piece of content has attachments, comments, or child pages.
+  Note, this doesn't actually contain the child objects.

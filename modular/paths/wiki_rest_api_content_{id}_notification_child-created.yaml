@@ -1,0 +1,69 @@
+get:
+  tags:
+    - Content watches
+  summary: Get watches for page
+  description: |-
+    Returns the watches for a page. A user that watches a page will receive
+    receive notifications when the page is updated.
+
+    If you want to manage watches for a page, use the following `user` methods:
+
+    - [Get content watch status for user](#api-user-watch-content-contentId-get)
+    - [Add content watch](#api-user-watch-content-contentId-post)
+    - [Remove content watch](#api-user-watch-content-contentId-delete)
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getWatchesForPage
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its watches.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned watches.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of watches to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 200
+  responses:
+    '200':
+      description: Returned if the requested watches are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/WatchArray.yaml
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:watcher:confluence
+        - read:user:confluence
+  x-atlassian-connect-scope: READ

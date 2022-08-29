@@ -1,0 +1,61 @@
+required:
+  - anonymousAccess
+  - operation
+  - unlicensedAccess
+type: object
+additionalProperties: true
+properties:
+  subjects:
+    type: object
+    properties:
+      user:
+        required:
+          - results
+          - size
+        type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: ./User.yaml
+          size:
+            type: integer
+            format: int32
+      group:
+        required:
+          - results
+          - size
+        type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: ./GroupCreate.yaml
+          size:
+            type: integer
+            format: int32
+    description: The users and/or groups that the permission applies to.
+  operation:
+    $ref: ./OperationCheckResult.yaml
+  anonymousAccess:
+    type: boolean
+    description: Grant anonymous users permission to use the operation.
+    default: false
+  unlicensedAccess:
+    type: boolean
+    description: |-
+      Grants access to unlicensed users from JIRA Service Desk when used
+      with the 'read space' operation.
+    default: false
+description: |-
+  This object represents a permission for given space. Permissions consist of
+  at least one operation object with an accompanying subjects object.
+
+  The following combinations of `operation` and `targetType` values are
+  valid for the `operation` object:
+
+    - 'create': 'page', 'blogpost', 'comment', 'attachment'
+    - 'read': 'space'
+    - 'delete': 'page', 'blogpost', 'comment', 'attachment'
+    - 'export': 'space'
+    - 'administer': 'space'

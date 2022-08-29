@@ -1,0 +1,52 @@
+required:
+  - type
+  - accountId
+  - profilePicture
+  - displayName
+  - operations
+  - isExternalCollaborator
+  - accountType
+  - email
+  - publicName
+  - personalSpace
+  - externalCollaborator
+type: object
+properties:
+  type:
+    type: string
+  username:
+    $ref: ./GenericUserName.yaml
+  userKey:
+    $ref: ./GenericUserKey.yaml
+  accountId:
+    $ref: ./GenericAccountId.yaml
+  profilePicture:
+    $ref: ./Icon.yaml
+  displayName:
+    type: string
+  timeZone:
+    nullable: true
+    type: string
+  operations:
+    type: array
+    nullable: true
+    items:
+      $ref: ./OperationCheckResult.yaml
+  isExternalCollaborator:
+    type: boolean
+  details:
+    $ref: ./UserDetails.yaml
+  accountType:
+    type: string
+  email:
+    type: string
+  publicName:
+    type: string
+  personalSpace:
+    type: object
+    nullable: true
+  externalCollaborator:
+    type: boolean
+description: |-
+  This essentially the same as the `User` object, but no `_links` property and
+  no `_expandable` property (therefore, different required fields).

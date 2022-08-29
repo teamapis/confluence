@@ -1,0 +1,8 @@
+type: object
+properties:
+  contentState:
+    $ref: ./ContentState.yaml
+    description: Null or content state
+  lastUpdated:
+    type: string
+    description: Timestamp of last publish event where content state changed

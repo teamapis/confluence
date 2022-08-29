@@ -1,0 +1,91 @@
+delete:
+  tags:
+    - Experimental
+  summary: Delete page tree
+  description: >-
+    Moves a pagetree rooted at a page to the space's trash:
+
+
+    - If the content's type is `page` and its status is `current`, it will be
+    trashed including
+
+    all its descendants.
+
+    - For every other combination of content type and status, this API is not
+    supported.
+
+
+    This API accepts the pageTree delete request and returns a task ID.
+
+    The delete process happens asynchronously.
+
+     Response example:
+     <pre><code>
+     {
+          "id" : "1180606",
+          "links" : {
+               "status" : "/rest/api/longtask/1180606"
+          }
+     }
+     </code></pre>
+     Use the `/longtask/<taskId>` REST API to get the copy task status.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Delete' permission for the space that the content is in.
+  operationId: deletePageTree
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content which forms root of the page tree, to be deleted.
+      required: true
+      schema:
+        type: string
+  responses:
+    '202':
+      description: >-
+        Returned if the request to trash content and all its current page
+        descendants, is successfully accepted.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LongTask.yaml
+    '400':
+      description: >-
+        Returned if the content id is invalid or id does not represents a
+        'CURRENT' page.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '403':
+      description: >-
+        Returned if the calling user can not delete the content with specified
+        id.
+      content: {}
+    '404':
+      description: >-
+        Returned if;
+
+
+        - There is no content with the given ID.
+
+        - The requesting user does not have permission to trash the content or
+        any of it's descendant pages.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - delete:content:confluence
+  x-atlassian-connect-scope: DELETE

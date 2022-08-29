@@ -1,0 +1,28 @@
+type: object
+properties:
+  view:
+    $ref: ./ContentBody.yaml
+  export_view:
+    $ref: ./ContentBody.yaml
+  styled_view:
+    $ref: ./ContentBody.yaml
+  storage:
+    $ref: ./ContentBody.yaml
+  editor:
+    $ref: ./ContentBody.yaml
+  editor2:
+    $ref: ./ContentBody.yaml
+  wiki:
+    $ref: ./ContentBody.yaml
+  atlas_doc_format:
+    $ref: ./ContentBody.yaml
+  anonymous_export_view:
+    $ref: ./ContentBody.yaml
+description: |-
+  The body of the new content. Does not apply to attachments.
+  Only one body format should be specified as the property for
+  this object, e.g. `storage`.
+
+  Note, `editor2` format is used by Atlassian only. `anonymous_export_view` is
+  the same as `export_view` format but only content viewable by an anonymous
+  user is included.

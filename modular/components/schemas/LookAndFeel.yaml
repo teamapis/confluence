@@ -1,0 +1,41 @@
+required:
+  - bordersAndDividers
+  - content
+  - header
+  - headings
+  - links
+  - menus
+type: object
+properties:
+  headings:
+    required:
+      - color
+    type: object
+    properties:
+      color:
+        type: string
+  links:
+    required:
+      - color
+    type: object
+    properties:
+      color:
+        type: string
+  menus:
+    $ref: ./MenusLookAndFeel.yaml
+  header:
+    $ref: ./HeaderLookAndFeel.yaml
+  horizontalHeader:
+    $ref: ./HorizontalHeaderLookAndFeel.yaml
+  content:
+    $ref: ./ContentLookAndFeel.yaml
+  bordersAndDividers:
+    required:
+      - color
+    type: object
+    properties:
+      color:
+        type: string
+  spaceReference:
+    type: object
+    nullable: true

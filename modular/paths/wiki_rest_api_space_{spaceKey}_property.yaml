@@ -1,0 +1,152 @@
+get:
+  tags:
+    - Space properties
+  summary: Get space properties
+  description: >-
+    Returns all properties for the given space. Space properties are a key-value
+    storage associated with a space.
+
+
+    **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
+    ‘View’ permission for the space.
+  operationId: getSpaceProperties
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to be queried for its properties.
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the space
+        property to expand. By default, the `version` object is expanded.
+
+        - `version` returns information about the version of the content.
+        - `space` returns the space that the properties are in.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - version
+            - space
+    - name: start
+      in: query
+      description: The starting index of the returned objects.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of properties to return per page. Note, this may be
+        restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 10
+  responses:
+    '200':
+      description: Returned if the requested space properties are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SpacePropertyArray.yaml
+    '404':
+      description: |-
+        Returned if any of the following is true:
+
+        - There is no space with the given key.
+        - The calling user does not have permission to view the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-props
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-props
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Space properties
+  summary: Create space property
+  description: |-
+    Creates a new space property.
+
+    **[Permissions required](https://confluence.atlassian.com/x/_AozKw)**:
+    ‘Admin’ permission for the space.
+  operationId: createSpaceProperty
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space that the property will be created in.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The space property to be created.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/SpacePropertyCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the space property is created.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SpaceProperty.yaml
+    '400':
+      description: |-
+        Returned if any of the following is true:
+
+        - The space already has a value with the given key.
+        - No property value was provided.
+      content: {}
+    '403':
+      description: Returned if the user does not have 'Admin' permission for the space.
+      content: {}
+    '404':
+      description: |-
+        Returned if any of the following is true:
+
+        - There is no space with the given key.
+        - The calling user does not have permission to view the space.
+      content: {}
+    '409':
+      description: Returned if the key already exists within the space.
+      content: {}
+    '413':
+      description: Returned if the value for the property is too long.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-props
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-props
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:space.property:confluence
+        - write:space.property:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE

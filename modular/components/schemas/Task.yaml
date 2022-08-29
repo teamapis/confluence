@@ -1,0 +1,46 @@
+required:
+  - contentId
+  - createDate
+  - creator
+  - globalId
+  - id
+  - status
+type: object
+properties:
+  globalId:
+    type: integer
+    format: int64
+  id:
+    type: integer
+    format: int64
+  contentId:
+    type: integer
+    format: int64
+  status:
+    type: string
+  title:
+    type: string
+  description:
+    type: string
+  body:
+    type: string
+  creator:
+    type: string
+  assignee:
+    type: string
+  completeUser:
+    type: string
+  createDate:
+    type: integer
+    format: int64
+  dueDate:
+    type: integer
+    format: int64
+  updateDate:
+    type: integer
+    format: int64
+  completeDate:
+    type: integer
+    format: int64
+  _links:
+    $ref: ./GenericLinks.yaml

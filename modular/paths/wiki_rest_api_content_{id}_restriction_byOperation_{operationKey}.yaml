@@ -1,0 +1,98 @@
+get:
+  tags:
+    - Content restrictions
+  summary: Get restrictions for operation
+  description: |-
+    Returns the restictions on a piece of content for a given operation (read
+    or update).
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to view the content.
+  operationId: getRestrictionsForOperation
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its restrictions.
+      required: true
+      schema:
+        type: string
+    - name: operationKey
+      in: path
+      description: The operation type of the restrictions to be returned.
+      required: true
+      schema:
+        type: string
+        enum:
+          - read
+          - update
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the content
+
+        restrictions to expand.
+
+
+        - `restrictions.user` returns the piece of content that the restrictions
+        are
+
+        applied to. Expanded by default.
+
+        - `restrictions.group` returns the piece of content that the
+        restrictions are
+
+        applied to. Expanded by default.
+
+        - `content` returns the piece of content that the restrictions are
+
+        applied to.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - restrictions.user
+            - restrictions.group
+            - content
+    - name: start
+      in: query
+      description: The starting index of the users and groups in the returned restrictions.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of users and the maximum number of groups, in the
+        returned restrictions, to return per page. Note, this may be restricted
+        by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 100
+  responses:
+    '200':
+      description: Returned if the requested restrictions are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentRestriction.yaml
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.all
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.all
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

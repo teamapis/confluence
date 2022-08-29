@@ -1,0 +1,147 @@
+required:
+  - status
+  - type
+nullable: true
+type: object
+additionalProperties: true
+properties:
+  id:
+    type: string
+  type:
+    type: string
+    description: Can be "page", "blogpost", "attachment" or "content"
+  status:
+    type: string
+  title:
+    type: string
+  space:
+    $ref: ./Space.yaml
+  history:
+    $ref: ./ContentHistory.yaml
+  version:
+    $ref: ./Version.yaml
+  ancestors:
+    nullable: true
+    type: array
+    items:
+      $ref: ./Content.yaml
+  operations:
+    type: array
+    items:
+      $ref: ./OperationCheckResult.yaml
+  children:
+    $ref: ./ContentChildren.yaml
+  childTypes:
+    $ref: ./ContentChildType.yaml
+  descendants:
+    $ref: ./ContentChildren.yaml
+  container:
+    $ref: ./Container.yaml
+  body:
+    type: object
+    properties:
+      view:
+        $ref: ./ContentBody.yaml
+      export_view:
+        $ref: ./ContentBody.yaml
+      styled_view:
+        $ref: ./ContentBody.yaml
+      storage:
+        $ref: ./ContentBody.yaml
+      wiki:
+        $ref: ./ContentBody.yaml
+      editor:
+        $ref: ./ContentBody.yaml
+      editor2:
+        $ref: ./ContentBody.yaml
+      anonymous_export_view:
+        $ref: ./ContentBody.yaml
+      atlas_doc_format:
+        $ref: ./ContentBody.yaml
+      dynamic:
+        $ref: ./ContentBody.yaml
+      _expandable:
+        type: object
+        properties:
+          editor:
+            type: string
+          view:
+            type: string
+          export_view:
+            type: string
+          styled_view:
+            type: string
+          storage:
+            type: string
+          editor2:
+            type: string
+          anonymous_export_view:
+            type: string
+          atlas_doc_format:
+            type: string
+          wiki:
+            type: string
+          dynamic:
+            type: string
+          raw:
+            type: string
+  restrictions:
+    type: object
+    properties:
+      read:
+        $ref: ./ContentRestriction.yaml
+      update:
+        $ref: ./ContentRestriction.yaml
+      _expandable:
+        type: object
+        properties:
+          read:
+            type: string
+          update:
+            type: string
+      _links:
+        $ref: ./GenericLinks.yaml
+  metadata:
+    $ref: ./ContentMetadata.yaml
+  macroRenderedOutput:
+    type: object
+    additionalProperties:
+      type: object
+  extensions:
+    type: object
+  _expandable:
+    type: object
+    properties:
+      childTypes:
+        type: string
+      container:
+        type: string
+      metadata:
+        type: string
+      operations:
+        type: string
+      children:
+        type: string
+      restrictions:
+        type: string
+      history:
+        type: string
+      ancestors:
+        type: string
+      body:
+        type: string
+      version:
+        type: string
+      descendants:
+        type: string
+      space:
+        type: string
+      extensions:
+        type: string
+      schedulePublishDate:
+        type: string
+      macroRenderedOutput:
+        type: string
+  _links:
+    $ref: ./GenericLinks.yaml
+description: Base object for all content types.

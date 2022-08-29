@@ -1,0 +1,113 @@
+put:
+  tags:
+    - Template
+  summary: Update content template
+  description: >-
+    Updates a content template. Note, blueprint templates cannot be updated
+
+    via the REST API.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Admin' permission for the space to update a space template or 'Confluence
+    Administrator'
+
+    global permission to update a global template.
+  operationId: updateContentTemplate
+  requestBody:
+    description: The updated content template.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentTemplateUpdate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the template is updated.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentTemplate.yaml
+    '400':
+      description: Returned if template name is null or an empty string.
+      content: {}
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to update the
+        template.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:template:confluence
+        - read:content-details:confluence
+        - write:template:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE
+post:
+  tags:
+    - Template
+  summary: Create content template
+  description: >-
+    Creates a new content template. Note, blueprint templates cannot be created
+    via the REST API.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Admin' permission for the space to create a space template or 'Confluence
+    Administrator'
+
+    global permission to create a global template.
+  operationId: createContentTemplate
+  requestBody:
+    description: |-
+      The content template to be created.
+      The content body must be in 'storage' format.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentTemplateCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the template is created.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentTemplate.yaml
+    '400':
+      description: Returned if template name is null or an empty string.
+      content: {}
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to create the
+        template.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:template:confluence
+        - read:content-details:confluence
+        - write:template:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: WRITE

@@ -1,0 +1,139 @@
+get:
+  tags:
+    - Content versions
+  summary: Get content version
+  description: >-
+    Returns a version for a piece of content.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to view the content. If the content is a blog post, 'View'
+    permission
+
+    for the space is required.
+  operationId: getContentVersion
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its version.
+      required: true
+      schema:
+        type: string
+    - name: versionNumber
+      in: path
+      description: The number of the version to be retrieved.
+      required: true
+      schema:
+        type: integer
+        format: int32
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the content to
+        expand. By default, the `content`
+
+        object is expanded.
+
+
+        - `collaborators` returns the users that collaborated on the version.
+
+        - `content` returns the content for the version.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    '200':
+      description: Returned if the version is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Version.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view the
+        content.
+      content: {}
+    '404':
+      description: Returned if the content or version cannot be found.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ
+delete:
+  tags:
+    - Content versions
+  summary: Delete content version
+  description: >-
+    Delete a historical version. This does not delete the changes made to the
+
+    content in that version, rather the changes for the deleted version are
+
+    rolled up into the next version. Note, you cannot delete the current
+    version.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to update the content.
+  operationId: deleteContentVersion
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content that the version will be deleted from.
+      required: true
+      schema:
+        type: string
+    - name: versionNumber
+      in: path
+      description: |-
+        The number of the version to be deleted. The version number starts
+        from 1 up to current version.
+      required: true
+      schema:
+        type: integer
+        format: int32
+  responses:
+    '204':
+      description: Returned if the version is deleted.
+      content: {}
+    '400':
+      description: |-
+        Returned if;
+
+        - The content or version cannot be found.
+        - The current version is specified.
+      content: {}
+    '403':
+      description: |-
+        Returned if the calling user doesn't have permission to edit the
+        content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - delete:content:confluence
+  x-atlassian-connect-scope: DELETE

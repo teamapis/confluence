@@ -1,0 +1,13 @@
+required:
+  - themeKey
+type: object
+properties:
+  themeKey:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  icon:
+    $ref: ./Icon.yaml
+description: Theme object without links. Used in ThemeArray.

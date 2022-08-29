@@ -1,0 +1,15 @@
+required:
+  - id
+  - label
+  - name
+  - prefix
+type: object
+properties:
+  prefix:
+    type: string
+  name:
+    type: string
+  id:
+    type: string
+  label:
+    type: string

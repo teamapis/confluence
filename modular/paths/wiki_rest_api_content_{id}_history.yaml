@@ -1,0 +1,90 @@
+get:
+  tags:
+    - Content
+  summary: Get content history
+  description: >-
+    Returns the most recent update for a piece of content.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to view the content.
+  operationId: getHistoryForContent
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its history.
+      required: true
+      schema:
+        type: string
+    - name: expand
+      in: query
+      description: >-
+        A multi-value parameter indicating which properties of the content
+        history to expand.
+
+        Maximum sub-expansions allowed is `8`.
+
+
+        - `lastUpdated` returns information about the most recent update of the
+        content,
+
+        including who updated it and when it was updated.
+
+        - `previousVersion` returns information about the update prior to the
+        current content
+
+        update. For this method, it contains the same information as
+        `lastUpdated`.
+
+        - `contributors` returns all of the users who have contributed to the
+        content.
+
+        - `nextVersion` This parameter is not used for this method.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - lastUpdated
+            - previousVersion
+            - contributors
+            - nextVersion
+  responses:
+    '200':
+      description: Returned if the requested content history is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentHistory.yaml
+    '400':
+      description: Returned if sub-expansions limit exceeds.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no content with the given ID.
+        - The calling user does not have permission to view the content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content.metadata:confluence
+        - read:user:confluence
+  x-atlassian-connect-scope: READ

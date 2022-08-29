@@ -1,0 +1,49 @@
+required:
+  - _links
+  - description
+  - labels
+  - name
+  - originalTemplate
+  - referencingBlueprint
+  - templateId
+  - templateType
+type: object
+properties:
+  templateId:
+    type: string
+  originalTemplate:
+    required:
+      - moduleKey
+      - pluginKey
+    type: object
+    properties:
+      pluginKey:
+        type: string
+      moduleKey:
+        type: string
+  referencingBlueprint:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  space:
+    type: object
+    additionalProperties: true
+  labels:
+    type: array
+    items:
+      $ref: ./Label.yaml
+  templateType:
+    type: string
+  editorVersion:
+    type: string
+  body:
+    $ref: ./ContentTemplateBody.yaml
+  _expandable:
+    type: object
+    properties:
+      body:
+        type: string
+  _links:
+    $ref: ./GenericLinks.yaml

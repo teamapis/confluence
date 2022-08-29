@@ -1,0 +1,163 @@
+get:
+  tags:
+    - Group
+  summary: Get groups
+  description: |-
+    Returns all user groups. The returned groups are ordered alphabetically in
+    ascending order by group name.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getGroups
+  parameters:
+    - name: start
+      in: query
+      description: The starting index of the returned groups.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of groups to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 200
+    - name: accessType
+      in: query
+      description: The group permission level for which to filter results.
+      required: false
+      schema:
+        type: string
+        default: null
+        enum:
+          - user
+          - admin
+          - site-admin
+  responses:
+    '200':
+      description: Returned if the requested groups are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GroupArrayWithLinks.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view
+        groups.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-groups
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-groups
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:group:confluence
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Group
+  summary: Create new user group
+  description: |-
+    Creates a new user group.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    User must be a site admin.
+  operationId: createGroup
+  requestBody:
+    description: Name of the group that is to be created.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/GroupName.yaml
+    required: true
+  responses:
+    '201':
+      description: Returned if the group was created successfully.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Group.yaml
+    '400':
+      description: Returned if the name is missing or invalid.
+      content: {}
+    '401':
+      description: Returned if the calling user is not logged in to Confluence.
+      content: {}
+    '403':
+      description: Returned if the user is not a site admin.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-groups
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-groups
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:group:confluence
+        - write:group:confluence
+  x-codegen-request-body-name: body
+  x-atlassian-connect-scope: INACCESSIBLE
+delete:
+  tags:
+    - Group
+  summary: Delete user group
+  description: |-
+    Delete user group.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    User must be a site admin.
+  operationId: removeGroup
+  parameters:
+    - name: name
+      in: query
+      description: Name of the group to delete.
+      required: true
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returned if the group was removed successfully.
+      content: {}
+    '400':
+      description: Returned if the name is missing or invalid.
+      content: {}
+    '401':
+      description: Returned if the calling user is not logged in to Confluence.
+      content: {}
+    '403':
+      description: Returned if the user is not a site admin.
+      content: {}
+    '404':
+      description: If no user group by the give name exists.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-groups
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-groups
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:group:confluence
+  x-atlassian-connect-scope: INACCESSIBLE

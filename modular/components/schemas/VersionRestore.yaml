@@ -1,0 +1,29 @@
+required:
+  - operationKey
+  - params
+type: object
+properties:
+  operationKey:
+    type: string
+    description: Set to 'restore'.
+    enum:
+      - restore
+  params:
+    required:
+      - message
+      - versionNumber
+    type: object
+    properties:
+      versionNumber:
+        type: integer
+        description: The version number to be restored.
+        format: int32
+      message:
+        type: string
+        description: Description for the version.
+      restoreTitle:
+        type: boolean
+        default: false
+        description: >-
+          If true, the content title will be the same as the title from the
+          version restored. Defaults to `false`.

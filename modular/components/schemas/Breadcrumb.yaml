@@ -1,0 +1,12 @@
+required:
+  - label
+  - separator
+  - url
+type: object
+properties:
+  label:
+    type: string
+  url:
+    type: string
+  separator:
+    type: string

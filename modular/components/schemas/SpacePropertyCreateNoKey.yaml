@@ -1,0 +1,6 @@
+required:
+  - value
+type: object
+properties:
+  value:
+    $ref: ./PropertyValue.yaml

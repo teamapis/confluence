@@ -1,0 +1,14 @@
+required:
+  - themeKey
+type: object
+properties:
+  themeKey:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  icon:
+    $ref: ./Icon.yaml
+  _links:
+    $ref: ./GenericLinks.yaml

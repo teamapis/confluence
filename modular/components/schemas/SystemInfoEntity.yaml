@@ -1,0 +1,20 @@
+required:
+  - cloudId
+  - commitHash
+type: object
+nullable: true
+properties:
+  cloudId:
+    type: string
+  commitHash:
+    type: string
+  baseUrl:
+    type: string
+  edition:
+    type: string
+  siteTitle:
+    type: string
+  defaultLocale:
+    type: string
+  defaultTimeZone:
+    type: string

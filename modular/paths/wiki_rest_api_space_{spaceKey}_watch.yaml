@@ -1,0 +1,47 @@
+get:
+  tags:
+    - Content watches
+  summary: Get space watchers
+  description: Returns a list of watchers of a space
+  operationId: getWatchersForSpace
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to get watchers.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The start point of the collection to return.
+      schema:
+        type: string
+    - name: limit
+      in: query
+      description: >-
+        The limit of the number of items to return, this may be restricted by
+        fixed system limits.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if watchers list is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SpaceWatchArray.yaml
+    '404':
+      description: Returned if there is no space with the given key
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:watcher:confluence
+        - read:user:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:watcher:confluence
+        - read:user:confluence
+  x-atlassian-connect-scope: READ

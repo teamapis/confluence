@@ -1,0 +1,16 @@
+required:
+  - userAccountIds
+nullable: true
+type: object
+additionalProperties: true
+properties:
+  users:
+    type: array
+    items:
+      $ref: ./User.yaml
+  userKeys:
+    type: array
+    items:
+      type: string
+  _links:
+    $ref: ./GenericLinks.yaml

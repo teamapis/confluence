@@ -1,0 +1,10 @@
+required:
+  - value
+type: object
+additionalProperties: false
+properties:
+  value:
+    type: object
+    additionalProperties: true
+    properties: {}
+    description: The value of the user property.

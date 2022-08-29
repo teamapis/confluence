@@ -1,0 +1,51 @@
+get:
+  tags:
+    - Long-running task
+  summary: Get long-running tasks
+  description: |-
+    Returns information about all active long-running tasks (e.g. space export),
+    such as how long each task has been running and the percentage of each task
+    that has completed.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getTasks
+  parameters:
+    - name: start
+      in: query
+      description: The starting index of the returned tasks.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of tasks to return per page. Note, this may be
+        restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 100
+  responses:
+    '200':
+      description: Returned if the requested tasks are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LongTaskStatusArray.yaml
+    '401':
+      description: Returned if the calling user is not logged in to Confluence.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:content.metadata:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:content.metadata:confluence
+  x-atlassian-connect-scope: READ

@@ -1,0 +1,79 @@
+get:
+  tags:
+    - Experimental
+  summary: Get user properties
+  description: >-
+    Returns the properties for a user as list of property keys. For more
+    information
+
+    about user properties, see [Confluence entity
+    properties](https://developer.atlassian.com/cloud/confluence/confluence-entity-properties/).
+
+    `Note`, these properties stored against a user are on a Confluence site
+    level and not space/content level.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getUserProperties
+  parameters:
+    - name: userId
+      in: path
+      description: The account ID of the user to be queried for its properties.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned properties.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of properties to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        maximum: 25
+        type: integer
+        format: int32
+        default: 5
+  responses:
+    '200':
+      description: Returned if the requested properties are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserPropertyKeyArray.yaml
+    '400':
+      description: >-
+        Returned if request has malformed syntax or userId is not a valid user
+        id.
+      content: {}
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+      content: {}
+    '403':
+      description: Returned if the user does not have the correct permissions.
+      content: {}
+    '404':
+      description: Returned if there is no user with the given user ID.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:user.property:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:user.property:confluence
+  x-experimental: true
+  x-atlassian-connect-scope: READ

@@ -1,0 +1,67 @@
+required:
+  - operation
+  - restrictions
+type: object
+properties:
+  operation:
+    type: string
+    description: The restriction operation applied to content.
+    enum:
+      - read
+      - update
+  restrictions:
+    type: object
+    properties:
+      user:
+        type: array
+        description: |-
+          The users that the restrictions will be applied to. This array must
+          have at least one item, otherwise it should be omitted.
+        items:
+          required:
+            - accountId
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+              description: Set to 'known'.
+              enum:
+                - known
+                - unknown
+                - anonymous
+                - user
+            username:
+              $ref: ./GenericUserName.yaml
+            userKey:
+              $ref: ./GenericUserKey.yaml
+            accountId:
+              $ref: ./GenericAccountId.yaml
+          description: >-
+            A user that the restriction will be applied to. Either the
+            `username`
+
+            or the `userKey` must be specified to identify the user.
+      group:
+        type: array
+        description: |-
+          The groups that the restrictions will be applied to. This array must
+          have at least one item, otherwise it should be omitted.
+        items:
+          required:
+            - name
+            - type
+          type: object
+          properties:
+            type:
+              type: string
+              description: Set to 'group'.
+              enum:
+                - group
+            name:
+              type: string
+              description: The name of the group.
+          description: A group that the restriction will be applied to.
+    description: |-
+      The users/groups that the restrictions will be applied to. At least one of
+      `user` or `group` must be specified for this object.

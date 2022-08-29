@@ -1,0 +1,38 @@
+get:
+  tags:
+    - Group
+  summary: Get group
+  description: |-
+    Returns a user group for a given group name.
+
+    Use updated Get group API
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getGroupByName
+  parameters:
+    - name: groupName
+      in: path
+      description: |-
+        The name of the group. This is the same as the group name shown in
+        the Confluence administration console.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested group is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Group.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view
+        groups.
+      content: {}
+    '404':
+      description: Returned if the group does not exist.
+      content: {}
+  deprecated: true
+  x-atlassian-connect-scope: READ

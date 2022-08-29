@@ -1,0 +1,53 @@
+get:
+  tags:
+    - Users
+  summary: Get anonymous user
+  description: |-
+    Returns information about how anonymous users are represented, like the
+    profile picture and display name.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getAnonymousUser
+  parameters:
+    - name: expand
+      in: query
+      description: |-
+        A multi-value parameter indicating which properties of the user to
+        expand.
+
+          - `operations` returns the operations that the user is allowed to do.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - operations
+  responses:
+    '200':
+      description: Returned if the anonymous user representation is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserAnonymous.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to use
+        Confluence.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-user
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-user
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:user:confluence
+  x-atlassian-connect-scope: READ

@@ -1,0 +1,49 @@
+get:
+  tags:
+    - Users
+  summary: Get user email address
+  description: >-
+    Returns a user's email address. This API is only available to apps approved
+    by
+
+    Atlassian, according to these
+    [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603).
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getPrivacyUnsafeUserEmail
+  parameters:
+    - name: accountId
+      in: query
+      description: >-
+        The account ID of the user, which uniquely identifies the user across
+        all Atlassian products.
+
+        For example, `384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192`. Required.
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested user's email is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AccountIdEmailRecord.yaml
+    '400':
+      description: Returned if the calling app is not approved to use this API.
+      content: {}
+    '401':
+      description: |-
+        Returned if the authentication credentials are incorrect or missing
+        from the request.
+      content: {}
+    '404':
+      description: Returned if a user with the given accountId does not exist.
+      content: {}
+    '501':
+      description: Indicates that the API is not currently enabled.
+      content: {}
+  x-atlassian-connect-scope: ACCESS_EMAIL_ADDRESSES

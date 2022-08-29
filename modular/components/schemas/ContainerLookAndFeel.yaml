@@ -1,0 +1,43 @@
+required:
+  - background
+  - backgroundColor
+  - backgroundImage
+  - backgroundSize
+  - borderRadius
+  - padding
+type: object
+nullable: true
+properties:
+  background:
+    type: string
+  backgroundAttachment:
+    type: string
+    nullable: true
+  backgroundBlendMode:
+    type: string
+    nullable: true
+  backgroundClip:
+    type: string
+    nullable: true
+  backgroundColor:
+    type: string
+    nullable: true
+  backgroundImage:
+    type: string
+    nullable: true
+  backgroundOrigin:
+    type: string
+    nullable: true
+  backgroundPosition:
+    type: string
+    nullable: true
+  backgroundRepeat:
+    type: string
+    nullable: true
+  backgroundSize:
+    type: string
+    nullable: true
+  padding:
+    type: string
+  borderRadius:
+    type: string

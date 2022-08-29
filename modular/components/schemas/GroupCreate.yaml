@@ -1,0 +1,13 @@
+required:
+  - name
+  - type
+type: object
+additionalProperties: true
+properties:
+  type:
+    type: string
+    default: group
+    enum:
+      - group
+  name:
+    type: string

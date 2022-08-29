@@ -1,0 +1,64 @@
+type: object
+additionalProperties: true
+properties:
+  currentuser:
+    type: object
+    properties:
+      favourited:
+        type: object
+        properties:
+          isFavourite:
+            type: boolean
+          favouritedDate:
+            type: string
+            format: date-time
+      lastmodified:
+        type: object
+        properties:
+          version:
+            $ref: ./Version.yaml
+          friendlyLastModified:
+            type: string
+      lastcontributed:
+        type: object
+        properties:
+          status:
+            type: string
+          when:
+            type: string
+            format: date-time
+      viewed:
+        type: object
+        properties:
+          lastSeen:
+            type: string
+            format: date-time
+          friendlyLastSeen:
+            type: string
+      scheduled:
+        type: object
+      _expandable:
+        type: object
+        properties:
+          favourited:
+            type: string
+          lastmodified:
+            type: string
+          lastcontributed:
+            type: string
+          viewed:
+            type: string
+          scheduled:
+            type: string
+  properties:
+    $ref: ./GenericLinks.yaml
+  frontend:
+    type: object
+    additionalProperties: true
+  labels:
+    oneOf:
+      - $ref: ./LabelArray.yaml
+      - type: array
+        items:
+          $ref: ./Label.yaml
+description: Metadata object for page, blogpost, comment content

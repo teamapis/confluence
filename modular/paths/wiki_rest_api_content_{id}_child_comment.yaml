@@ -1,0 +1,99 @@
+get:
+  tags:
+    - Content comments
+  summary: Get content comments
+  description: >-
+    Returns the comments on a piece of content.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    'View' permission for the space,
+
+    and permission to view the content if it is a page.
+  operationId: getContentComments
+  parameters:
+    - name: id
+      in: path
+      description: The ID of the content to be queried for its comments.
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/contentExpand.yaml
+    - name: parentVersion
+      in: query
+      description: |-
+        The version of the parent content to retrieve children for.
+        Currently, this only works for the latest version.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: start
+      in: query
+      description: The starting index of the returned comments.
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of comments to return per page. Note,
+        this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 25
+    - name: location
+      in: query
+      description: >-
+        The location of the comments in the page. Multiple locations can be
+        specified.
+
+        If no location is specified, comments from all locations are returned.
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+        enum:
+          - inline
+          - footer
+          - resolved
+    - name: depth
+      in: query
+      description: |-
+        Currently, this parameter is not used.
+        Comments are returned at the root level only.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returned if the requested comments are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentArray.yaml
+    '404':
+      description: |-
+        Returned if;
+
+        - There is no parent content with the given ID.
+        - The calling user does not have permission to view the parent content.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ

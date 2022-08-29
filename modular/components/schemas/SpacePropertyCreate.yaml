@@ -1,0 +1,17 @@
+required:
+  - key
+  - value
+type: object
+properties:
+  key:
+    type: string
+    description: The key of the new property.
+  value:
+    $ref: ./PropertyValue.yaml
+  space:
+    type: object
+    additionalProperties: true
+    properties:
+      key:
+        type: string
+        description: The key of the space

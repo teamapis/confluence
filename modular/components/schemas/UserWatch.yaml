@@ -1,0 +1,6 @@
+required:
+  - watching
+type: object
+properties:
+  watching:
+    type: boolean

@@ -1,0 +1,13 @@
+required:
+  - contentId
+  - type
+  - watcher
+type: object
+properties:
+  type:
+    type: string
+  watcher:
+    $ref: ./WatchUser.yaml
+  contentId:
+    type: integer
+    format: int64

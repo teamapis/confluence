@@ -1,0 +1,52 @@
+get:
+  tags:
+    - Group
+  summary: Get group members
+  description: |-
+    Returns the users that are members of a group.
+
+    Use updated Get group API
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getGroupMembers
+  parameters:
+    - name: groupName
+      in: path
+      description: The name of the group to be queried for its members.
+      required: true
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned users.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of users to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 200
+  responses:
+    '200':
+      description: Returned if the requested users are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserArray.yaml
+    '400':
+      description: Returned if given limit is greater than 200
+      content: {}
+    '403':
+      description: Returned if the calling user does not have permission to view users.
+      content: {}
+  deprecated: true
+  x-atlassian-connect-scope: READ

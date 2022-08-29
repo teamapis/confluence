@@ -1,0 +1,20 @@
+required:
+  - limit
+  - results
+  - size
+  - start
+type: object
+properties:
+  results:
+    type: array
+    items:
+      $ref: ./Task.yaml
+  start:
+    type: integer
+    format: int32
+  limit:
+    type: integer
+    format: int32
+  size:
+    type: integer
+    format: int32

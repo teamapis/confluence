@@ -1,0 +1,8 @@
+required:
+  - label
+type: object
+properties:
+  label:
+    $ref: ./Label.yaml
+  associatedContents:
+    $ref: ./LabeledContentPageResponse.yaml

@@ -1,0 +1,214 @@
+get:
+  tags:
+    - Content watches
+  summary: Get content watch status
+  description: >-
+    Returns whether a user is watching a piece of content. Choose the user by
+
+    doing one of the following:
+
+
+    - Specify a user via a query parameter: Use the `accountId` to identify the
+    user.
+
+    - Do not specify a user: The currently logged-in user will be used.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Confluence Administrator' global permission if specifying a user, otherwise
+
+    permission to access the Confluence site ('Can use' global permission).
+  operationId: getContentWatchStatus
+  parameters:
+    - name: contentId
+      in: path
+      description: |-
+        The ID of the content to be queried for whether the specified user is
+        watching it.
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/userLookupKey.yaml
+    - $ref: ../components/parameters/userLookupUsername.yaml
+    - $ref: ../components/parameters/userLookupAccountId.yaml
+  responses:
+    '200':
+      description: Returned if the requested watch status is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/UserWatch.yaml
+    '403':
+      description: |-
+        Returned if;
+
+        - The calling user does not have permission to view the
+        content.
+        - A user is specified via a query parameter and the calling user is
+        not a Confluence administrator.
+        - No content exists for the specified `contentId`.
+      content: {}
+    '404':
+      description: Returned if no `contentId` is specified.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:watcher:confluence
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Content watches
+  summary: Add content watcher
+  description: >-
+    Adds a user as a watcher to a piece of content. Choose the user by doing
+
+    one of the following:
+
+
+    - Specify a user via a query parameter: Use the `accountId` to identify the
+    user.
+
+    - Do not specify a user: The currently logged-in user will be used.
+
+
+    Note, you must add the `X-Atlassian-Token: no-check` header when making a
+
+    request, as this operation has XSRF protection.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Confluence Administrator' global permission if specifying a user, otherwise
+
+    permission to access the Confluence site ('Can use' global permission).
+  operationId: addContentWatcher
+  parameters:
+    - name: contentId
+      in: path
+      description: The ID of the content to add the watcher to.
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/userLookupKey.yaml
+    - $ref: ../components/parameters/userLookupUsername.yaml
+    - $ref: ../components/parameters/userLookupAccountId.yaml
+  responses:
+    '204':
+      description: |-
+        Returned if the watcher was successfully created. No response body is
+        returned.
+      content: {}
+    '403':
+      description: |-
+        Returned if;
+
+        - The `X-Atlassian-Token: no-check` header is not specified.
+        - The calling user does not have permission to view the
+        content.
+        - A user is specified via a query parameter and the calling user is
+        not a Confluence administrator.
+        - No content exists for the specified `contentId`.
+      content: {}
+    '404':
+      description: Returned if no `contentId` is specified.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:watcher:confluence
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Content watches
+  summary: Remove content watcher
+  description: >-
+    Removes a user as a watcher from a piece of content. Choose the user by
+
+    doing one of the following:
+
+
+    - Specify a user via a query parameter: Use the `accountId` to identify the
+    user.
+
+    - Do not specify a user: The currently logged-in user will be used.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Confluence Administrator' global permission if specifying a user, otherwise
+
+    permission to access the Confluence site ('Can use' global permission).
+  operationId: removeContentWatcher
+  parameters:
+    - name: X-Atlassian-Token
+      in: header
+      description: |-
+        Note, you must add header when making a
+        request, as this operation has XSRF protection.
+      required: true
+      schema:
+        type: string
+        default: no-check
+    - name: contentId
+      in: path
+      description: The ID of the content to remove the watcher from.
+      required: true
+      schema:
+        type: string
+    - $ref: ../components/parameters/userLookupKey.yaml
+    - $ref: ../components/parameters/userLookupUsername.yaml
+    - $ref: ../components/parameters/userLookupAccountId.yaml
+  responses:
+    '204':
+      description: |-
+        Returned if the watcher was successfully deleted. No response body is
+        returned.
+      content: {}
+    '403':
+      description: |-
+        Returned if;
+
+        - The `X-Atlassian-Token: no-check` header is not specified.
+        - The calling user does not have permission to view the
+        content.
+        - A user is specified via a query parameter and the calling user is
+        not a Confluence administrator.
+        - No content exists for the specified `contentId`.
+      content: {}
+    '404':
+      description: Returned if no `contentId` is specified.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:watcher:confluence
+  x-atlassian-connect-scope: WRITE

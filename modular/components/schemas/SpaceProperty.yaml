@@ -1,0 +1,34 @@
+required:
+  - _expandable
+  - id
+  - key
+  - value
+type: object
+properties:
+  id:
+    type: string
+  key:
+    type: string
+  value:
+    oneOf:
+      - type: array
+        items:
+          type: string
+      - type: boolean
+      - type: object
+        additionalProperties: true
+        properties: {}
+      - type: string
+  version:
+    $ref: ./Version.yaml
+  space:
+    $ref: ./Space.yaml
+  _links:
+    $ref: ./GenericLinks.yaml
+  _expandable:
+    type: object
+    properties:
+      version:
+        type: string
+      space:
+        type: string

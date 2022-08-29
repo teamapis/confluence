@@ -1,0 +1,229 @@
+get:
+  tags:
+    - Experimental
+  summary: Get Space Labels
+  description: >-
+    Returns a list of labels associated with a space. Can provide a prefix as
+    well as other filters to
+
+    select different types of labels.
+  operationId: getLabelsForSpace
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to get labels for.
+      required: true
+      schema:
+        type: string
+    - name: prefix
+      in: query
+      description: >-
+        Filters the results to labels with the specified prefix. If this
+        parameter
+
+        is not specified, then labels with any prefix will be returned.
+
+
+        - `global` prefix is used by labels that are on content within the
+        provided space.
+
+        - `my` prefix can be explicitly added by a user when adding a label
+
+        via the UI, e.g. 'my:example-label'.
+
+        - `team` prefix is used for labels applied to the space.
+      schema:
+        type: string
+        enum:
+          - global
+          - my
+          - team
+    - name: start
+      in: query
+      description: The starting index of the returned labels.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of labels to return per page. Note,
+        this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 200
+  responses:
+    '200':
+      description: Returned if the list of labels is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LabelArray.yaml
+    '404':
+      description: |-
+        Returned if;
+        - There is no space with the given space key.
+        - The calling user does not have permission to view the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:confluence-space.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-space.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:label:confluence
+  x-experimental: true
+  x-atlassian-connect-scope: READ
+post:
+  tags:
+    - Experimental
+  summary: Add labels to a space
+  description: >-
+    Adds labels to a piece of content. Does not modify the existing labels.
+
+
+    Notes:
+
+
+    - Labels can also be added when creating content ([Create
+    content](#api-content-post)).
+
+    - Labels can be updated when updating content ([Update
+    content](#api-content-id-put)).
+
+    This will delete the existing labels and replace them with the labels in
+
+    the request.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to update the content.
+  operationId: addLabelsToSpace
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to add labels to.
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: The labels to add to the content.
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            $ref: ../components/schemas/LabelCreate.yaml
+    required: true
+  responses:
+    '200':
+      description: Returned if the labels are added to the content.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LabelArray.yaml
+    '400':
+      description: >-
+        Returned if;
+
+
+        - The body contains labels with invalid characters or too many
+        characters.
+
+        - The body contains too many labels.
+
+        - The target content would contain too many labels after the operation.
+
+        - The calling user does not have permission to edit labels.
+      content: {}
+    '403':
+      description: Returned if the calling user can view but not edit the content.
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+        - There is no space with the given space key.
+        - The calling user does not have permission to view the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-space
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-space
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:label:confluence
+        - write:label:confluence
+  x-experimental: true
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Experimental
+  summary: Remove label from a space
+  description: ''
+  operationId: deleteLabelFromSpace
+  parameters:
+    - name: spaceKey
+      in: path
+      description: The key of the space to remove a labels from.
+      required: true
+      schema:
+        type: string
+    - name: name
+      in: query
+      description: The name of the label to remove
+      required: true
+      schema:
+        type: string
+    - name: prefix
+      in: query
+      description: The prefix of the label to remove. If not provided defaults to global.
+      required: false
+      schema:
+        type: string
+  responses:
+    '204':
+      description: Returned if the label was successfully deleted.
+      content: {}
+    '400':
+      description: |-
+        Returned if;
+        - The user does not provide a label name
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+        - There is no space with the given space key.
+        - The calling user does not have permission to view the space.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-space
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-space
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:label:confluence
+  x-experimental: true
+  x-atlassian-connect-scope: WRITE

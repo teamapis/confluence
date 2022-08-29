@@ -1,0 +1,108 @@
+put:
+  tags:
+    - Content - children and descendants
+  summary: Move a page to a new location relative to a target page
+  description: >-
+    Move a page to a new location relative to a target page:
+
+
+    * `before` - move the page under the same parent as the target, before the
+    target in the list of children
+
+    * `after` - move the page under the same parent as the target, after the
+    target in the list of children
+
+    * `append` - move the page to be a child of the target
+
+
+    Caution: This API can move pages to the top level of a space. Top-level
+    pages are difficult to find in the UI
+
+    because they do not show up in the page tree display. To avoid this, never
+    use `before` or `after` positions
+
+    when the `targetId` is a top-level page.
+  operationId: movePage
+  parameters:
+    - name: pageId
+      in: path
+      description: The ID of the page to be moved
+      required: true
+      schema:
+        type: string
+    - name: position
+      in: path
+      description: >-
+        The position to move the page to relative to the target page:
+
+        * `before` - move the page under the same parent as the target, before
+        the target in the list of children
+
+        * `after` - move the page under the same parent as the target, after the
+        target in the list of children
+
+        * `append` - move the page to be a child of the target
+      required: true
+      schema:
+        type: string
+        enum:
+          - before
+          - after
+          - append
+    - name: targetId
+      in: path
+      description: The ID of the target page for this operation
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Page was successfully moved
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              pageId:
+                $ref: ../components/schemas/ContentId.yaml
+    '400':
+      description: >-
+        Returned if;
+
+
+        - A page already exists in the target space with the same name.
+          User is advised to rename page before moving.
+        - The move would create a parent-child loop (page becomes a descendant
+        and ancestor of itself)
+
+        - The page has permission restrictions that the user does not have
+        permission to create in the target space.
+          User is advised to remove restrictions before moving.
+      content: {}
+    '403':
+      description: |-
+        Returned if;
+
+        - User does not have permission to remove page from current space
+        - User does not have permission to create a page in target space
+      content: {}
+    '404':
+      description: |-
+        Returned if;
+
+        - The id or targetId refer to non-existent pages
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:page:confluence
+  x-atlassian-connect-scope: WRITE

@@ -1,0 +1,179 @@
+required:
+  - type
+type: object
+nullable: true
+additionalProperties: true
+properties:
+  id:
+    nullable: true
+    type: string
+    description: The ID of the draft content. Required when publishing a draft.
+  title:
+    nullable: true
+    maxLength: 255
+    type: string
+  type:
+    type: string
+    description: >-
+      The type of the new content. Custom content types defined by apps are also
+      supported. eg. 'page', 'blogpost', 'comment' etc.
+  space:
+    nullable: true
+    required:
+      - key
+    type: object
+    properties:
+      id:
+        nullable: true
+        type: integer
+        format: int64
+      name:
+        nullable: true
+        type: string
+      icon:
+        $ref: ./Icon.yaml
+      identifiers:
+        $ref: ./GlobalSpaceIdentifier.yaml
+      description:
+        type: object
+        nullable: true
+        properties:
+          plain:
+            $ref: ./SpaceDescription.yaml
+          view:
+            $ref: ./SpaceDescription.yaml
+          _expandable:
+            type: object
+            properties:
+              view:
+                type: string
+              plain:
+                type: string
+      homepage:
+        $ref: ./Content.yaml
+      type:
+        nullable: true
+        type: string
+      metadata:
+        nullable: true
+        type: object
+        properties:
+          labels:
+            $ref: ./LabelArray.yaml
+          _expandable:
+            type: object
+      operations:
+        nullable: true
+        type: array
+        items:
+          $ref: ./OperationCheckResult.yaml
+      permissions:
+        nullable: true
+        type: array
+        items:
+          $ref: ./SpacePermission.yaml
+      status:
+        nullable: true
+        type: string
+      settings:
+        $ref: ./SpaceSettings.yaml
+      theme:
+        $ref: ./Theme.yaml
+      lookAndFeel:
+        $ref: ./LookAndFeel.yaml
+      history:
+        required:
+          - createdDate
+        type: object
+        properties:
+          createdDate:
+            type: string
+            format: date-time
+          createdBy:
+            $ref: ./User.yaml
+      key:
+        type: string
+        description: The key of the space.
+      links:
+        nullable: true
+        type: object
+        additionalProperties: true
+    description: The space that the content is being created in.
+  status:
+    type: string
+    description: The status of the new content.
+    default: current
+    enum:
+      - current
+      - deleted
+      - historical
+      - draft
+  container:
+    nullable: true
+    required:
+      - id
+      - type
+    type: object
+    additionalProperties: true
+    properties:
+      id:
+        oneOf:
+          - type: integer
+          - type: string
+        description: The `id` of the container.
+      type:
+        type: string
+        description: The `type` of the container.
+    description: "The container of the content. Required if type is\_`comment` or certain types of\ncustom content. If you are trying to create a comment that is a child of another comment,\nspecify the parent comment in the ancestors field, not in this field."
+  ancestors:
+    nullable: true
+    type: array
+    description: "The parent content of the new content.  If you are creating a top-level `page` or `comment`,\nthis can be left blank. If you are creating a child page, this is where the parent page id goes.\nIf you are creating a child comment, this is where the parent comment id goes. Only one parent\ncontent\_id\_can be specified."
+    items:
+      required:
+        - id
+      type: object
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+          description: The `id` of the parent content.
+  body:
+    type: object
+    properties:
+      view:
+        $ref: ./ContentBodyCreate.yaml
+      export_view:
+        $ref: ./ContentBodyCreate.yaml
+      styled_view:
+        $ref: ./ContentBodyCreate.yaml
+      storage:
+        $ref: ./ContentBodyCreate.yaml
+      editor:
+        $ref: ./ContentBodyCreate.yaml
+      editor2:
+        $ref: ./ContentBodyCreate.yaml
+      wiki:
+        $ref: ./ContentBodyCreate.yaml
+      anonymous_export_view:
+        $ref: ./ContentBodyCreate.yaml
+      plain:
+        $ref: ./ContentBodyCreate.yaml
+      atlas_doc_format:
+        $ref: ./ContentBodyCreate.yaml
+      raw:
+        $ref: ./ContentBodyCreate.yaml
+    description: >-
+      The body of the new content. Does not apply to attachments.
+
+      Only one body format should be specified as the property for
+
+      this object, e.g. `storage`.
+
+
+      Note, `editor2` format is used by Atlassian only. `anonymous_export_view`
+      is
+
+      the same as `export_view` format but only content viewable by an anonymous
+
+      user is included.

@@ -1,0 +1,223 @@
+get:
+  tags:
+    - Content states
+  summary: Get content state
+  description: >-
+    Gets the current content state of the draft or current version of content.
+    To specify the draft version, set
+
+    the parameter status to draft, otherwise archived or current will get the
+    relevant published state.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to view the content.
+  operationId: getContentState
+  parameters:
+    - name: id
+      in: path
+      description: The id of the content whose content state is of interest.
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: Set status to one of [current,draft,archived].
+      schema:
+        type: string
+        enum:
+          - current
+          - draft
+          - archived
+  responses:
+    '200':
+      description: Returned if permission allows viewing of content.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentStateResponse.yaml
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+    '403':
+      description: Returned if user does not have content view permission.
+    '404':
+      description: Returned if the content with given id can not be found.
+  security:
+    - oAuthDefinitions:
+        - read:confluence-content.summary
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:confluence-content.summary
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:content-details:confluence
+  x-atlassian-connect-scope: READ
+put:
+  tags:
+    - Content states
+  summary: >-
+    Set the content state of a content and publishes a new version of the
+    content.
+  description: >-
+    Sets the content state of the content specified and creates a new version
+
+    (publishes the content without changing the body) of the content with the
+    new state.
+
+
+    You may pass in either an id of a state, or the name and color of a desired
+    new state.
+
+    If all 3 are passed in, id will be used.
+
+    If the name and color passed in already exist under the current user's
+    existing custom states, the existing state will be reused.
+
+    If custom states are disabled in the space of the content (which can be
+    determined by getting the content state space settings of the content's
+    space)
+
+    then this set will fail.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to edit the content.
+  operationId: setContentState
+  requestBody:
+    description: >-
+      Content state fields for state. Pass in id for an existing state, or new
+      name and color for best matching existing state, or new state if allowed
+      in space.
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ContentStateRestInput.yaml
+  parameters:
+    - name: id
+      in: path
+      description: The Id of the content whose content state is to be set.
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: >-
+        Status of content onto which state will be placed. If draft, then draft
+        state will change.
+
+        If current, state will be placed onto a new version of the content with
+        same body as previous version.
+      schema:
+        type: string
+        enum:
+          - current
+          - draft
+  responses:
+    '200':
+      description: Returned if content state is set successfully.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentStateResponse.yaml
+    '400':
+      description: >-
+        Invalid Name/Color, non-existent id of content state, or type of state
+        desired is not allowed.
+
+        Name must be less than or exactly 20 characters. Color must be a valid
+        hex string.
+
+        Status must be in [draft,current].
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+    '403':
+      description: Returned if user does not have content edit permission.
+    '404':
+      description: Returned if the content with given id can not be found.
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:content:confluence
+        - read:content-details:confluence
+  x-atlassian-connect-scope: WRITE
+delete:
+  tags:
+    - Content states
+  summary: Removes the content state of a content and publishes a new version.
+  description: >-
+    Removes the content state of the content specified and creates a new version
+
+    (publishes the content without changing the body) of the content with the
+    new status.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    Permission to edit the content.
+  operationId: removeContentState
+  parameters:
+    - name: id
+      in: path
+      description: The Id of the content whose content state is to be set.
+      required: true
+      schema:
+        type: string
+    - name: status
+      in: query
+      description: >-
+        status of content state from which to delete state. Can be draft or
+        archived
+      schema:
+        type: string
+        enum:
+          - current
+          - draft
+  responses:
+    '200':
+      description: Returned if content state is removed from content.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ContentStateResponse.yaml
+    '401':
+      description: >-
+        Returned if the authentication credentials are incorrect or missing from
+        the request.
+    '403':
+      description: Returned if user does not have content edit permission.
+    '404':
+      description: Returned if the content with given id can not be found.
+  security:
+    - oAuthDefinitions:
+        - write:confluence-content
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - write:confluence-content
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - write:content:confluence
+        - read:content-details:confluence
+  x-atlassian-connect-scope: DELETE

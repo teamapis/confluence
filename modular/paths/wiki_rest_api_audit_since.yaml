@@ -1,0 +1,100 @@
+get:
+  tags:
+    - Audit
+  summary: Get audit records for time period
+  description: >-
+    Returns records from the audit log, for a time period back from the current
+
+    date. For example, you can use this method to get the last 3 months of
+    records.
+
+
+    This contains information about events like space exports, group membership
+
+    changes, app installations, etc. For more information, see
+
+    [Audit
+    log](https://confluence.atlassian.com/confcloud/audit-log-802164269.html)
+
+    in the Confluence administrator's guide.
+
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+
+    'Confluence Administrator' global permission.
+  operationId: getAuditRecordsForTimePeriod
+  parameters:
+    - name: number
+      in: query
+      description: The number of units for the time period.
+      schema:
+        type: integer
+        format: int64
+        default: 3
+    - name: units
+      in: query
+      description: The unit of time that the time period is measured in.
+      schema:
+        type: string
+        default: MONTHS
+        enum:
+          - NANOS
+          - MICROS
+          - MILLIS
+          - SECONDS
+          - MINUTES
+          - HOURS
+          - HALF_DAYS
+          - DAYS
+          - WEEKS
+          - MONTHS
+          - YEARS
+          - DECADES
+          - CENTURIES
+    - name: searchString
+      in: query
+      description: |-
+        Filters the results to records that have string property values
+        matching the `searchString`.
+      schema:
+        type: string
+    - name: start
+      in: query
+      description: The starting index of the returned records.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 0
+    - name: limit
+      in: query
+      description: |-
+        The maximum number of records to return per page.
+        Note, this may be restricted by fixed system limits.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+        default: 1000
+  responses:
+    '200':
+      description: Returned if the requested records are returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/AuditRecordArray.yaml
+    '403':
+      description: |-
+        Returned if the calling user does not have permission to view the audit
+        log.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - read:audit-log:confluence
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - read:audit-log:confluence
+  x-atlassian-connect-scope: INACCESSIBLE

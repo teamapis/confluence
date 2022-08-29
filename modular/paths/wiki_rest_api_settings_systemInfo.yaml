@@ -1,0 +1,39 @@
+get:
+  tags:
+    - Settings
+  summary: Get system info
+  description: |-
+    Returns the system information for the Confluence Cloud tenant. This
+    information is used by Atlassian.
+
+    **[Permissions](https://confluence.atlassian.com/x/_AozKw) required**:
+    Permission to access the Confluence site ('Can use' global permission).
+  operationId: getSystemInfo
+  responses:
+    '200':
+      description: |-
+        Returned if the system information for the Confluence Cloud tenant
+        is returned.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SystemInfoEntity.yaml
+    '403':
+      description: |-
+        Returned when the user does not have permission to view the system
+        information.
+      content: {}
+  security:
+    - oAuthDefinitions:
+        - manage:confluence-configuration
+    - basicAuth: []
+  x-atlassian-oauth2-scopes:
+    - scheme: oAuthDefinitions
+      state: Current
+      scopes:
+        - manage:confluence-configuration
+    - scheme: oAuthDefinitions
+      state: Beta
+      scopes:
+        - read:configuration:confluence
+  x-atlassian-connect-scope: READ

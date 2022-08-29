@@ -1,0 +1,41 @@
+required:
+  - breadcrumbs
+  - entityType
+  - excerpt
+  - iconCssClass
+  - lastModified
+  - title
+  - url
+type: object
+properties:
+  content:
+    $ref: ./Content.yaml
+  user:
+    $ref: ./User.yaml
+  space:
+    $ref: ./Space.yaml
+  title:
+    type: string
+  excerpt:
+    type: string
+  url:
+    type: string
+  resultParentContainer:
+    $ref: ./ContainerSummary.yaml
+  resultGlobalContainer:
+    $ref: ./ContainerSummary.yaml
+  breadcrumbs:
+    type: array
+    items:
+      $ref: ./Breadcrumb.yaml
+  entityType:
+    type: string
+  iconCssClass:
+    type: string
+  lastModified:
+    type: string
+    format: date-time
+  friendlyLastModified:
+    type: string
+  score:
+    type: number

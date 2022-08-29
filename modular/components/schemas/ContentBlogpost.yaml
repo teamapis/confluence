@@ -1,0 +1,12 @@
+description: Representation of a blogpost (content)
+allOf:
+  - $ref: ./Content.yaml
+  - required:
+      - _links
+      - metadata
+    type: object
+    properties:
+      metadata:
+        $ref: ./ContentMetadata.yaml
+      _links:
+        $ref: ./GenericLinks.yaml
