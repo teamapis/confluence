@@ -5024,7 +5024,7 @@ paths:
           scopes:
             - write:content:confluence
             - read:content-details:confluence
-      x-atlassian-connect-scope: DELETE
+      x-atlassian-connect-scope: WRITE
   /wiki/rest/api/content/{id}/state/available:
     get:
       tags:
@@ -5389,7 +5389,7 @@ paths:
           state: Beta
           scopes:
             - read:user.property:confluence
-      x-atlassian-connect-scope: INACCESSIBLE
+      x-atlassian-connect-scope: READ
   /wiki/rest/api/contentbody/convert/{to}:
     post:
       tags:

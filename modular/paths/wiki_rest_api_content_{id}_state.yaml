@@ -220,4 +220,4 @@ delete:
       scopes:
         - write:content:confluence
         - read:content-details:confluence
-  x-atlassian-connect-scope: DELETE
+  x-atlassian-connect-scope: WRITE

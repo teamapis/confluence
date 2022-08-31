@@ -5988,7 +5988,7 @@
             ]
           }
         ],
-        "x-atlassian-connect-scope": "DELETE"
+        "x-atlassian-connect-scope": "WRITE"
       }
     },
     "/wiki/rest/api/content/{id}/state/available": {
@@ -6467,7 +6467,7 @@
             ]
           }
         ],
-        "x-atlassian-connect-scope": "INACCESSIBLE"
+        "x-atlassian-connect-scope": "READ"
       }
     },
     "/wiki/rest/api/contentbody/convert/{to}": {
